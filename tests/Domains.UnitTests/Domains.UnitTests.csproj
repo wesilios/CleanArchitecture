@@ -4,6 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>CleanArchitecture.Domain.UnitTests</RootNamespace>
+        <AssemblyName>CleanArchitecture.Domain.UnitTests</AssemblyName>
     </PropertyGroup>
     
     <ItemGroup>
@@ -13,8 +15,12 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Shouldly" />
+        <PackageReference Include="Shouldly" Version="4.3.0" />
         <PackageReference Include="xunit" Version="2.9.3" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Domains\Domain\Domain.csproj" />
     </ItemGroup>
 
 </Project>
