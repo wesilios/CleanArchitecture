@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CleanArchitecture.Api.Controllers;
+namespace CleanArchitecture.Presentation.Api.Controllers;
 
 [Route("[controller]")]
 public class HealthCheckController : ControllerBase
@@ -8,6 +8,6 @@ public class HealthCheckController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok("CleanArchitecture.Api is healthy");
+        return Ok("CleanArchitecture.Presentation.Api is healthy");
     }
 }

@@ -4,7 +4,7 @@ using CleanArchitecture.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
-namespace CleanArchitecture.Api
+namespace CleanArchitecture.Presentation.Api
 {
     public static class ServiceCollectionExtensions
     {

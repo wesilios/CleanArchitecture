@@ -4,7 +4,7 @@ using Chroma.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
-namespace Chroma.Api
+namespace Chroma.Presentation.Api
 {
     public static class ServiceCollectionExtensions
     {

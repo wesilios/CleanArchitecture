@@ -23,15 +23,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentations", "Presentations", "{1C6981F8-0F5C-414C-9258-1D57EB2ED162}"
 EndProject
 #if (useApi)
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Api", "src\Presentations\CleanArchitecture.Api\CleanArchitecture.Api.csproj", "{6DF45AAA-31C5-44B3-93BF-844EB61A004D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Presentation.Api", "src\Presentations\CleanArchitecture.Presentation.Api\CleanArchitecture.Presentation.Api.csproj", "{6DF45AAA-31C5-44B3-93BF-844EB61A004D}"
 EndProject
 #endif
 #if (useGrpc)
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Grpc", "src\Presentations\CleanArchitecture.Grpc\CleanArchitecture.Grpc.csproj", "{7BDCA684-0AFC-45A5-B721-1308734E65D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Presentation.Grpc", "src\Presentations\CleanArchitecture.Presentation.Grpc\CleanArchitecture.Presentation.Grpc.csproj", "{7BDCA684-0AFC-45A5-B721-1308734E65D2}"
 EndProject
 #endif
 #if (useRazorPages)
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Web", "src\Presentations\CleanArchitecture.Web\CleanArchitecture.Web.csproj", "{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Presentation.Web", "src\Presentations\CleanArchitecture.Presentation.Web\CleanArchitecture.Presentation.Web.csproj", "{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6}"
 EndProject
 #endif
 Global
@@ -50,7 +50,7 @@ Global
 		{CAE4DBD3-FDD0-4919-A29A-3EC3E06B30C7} = {1DFDD4CE-9013-4A9D-9B9A-0DABB0BE427F}
 		{6E752D22-35D7-47C2-AEF8-F9D733E8D086} = {CAE4DBD3-FDD0-4919-A29A-3EC3E06B30C7}
 #if (useApi)
-        {6DF45AAA-31C5-44B3-93BF-844EB61A004D} = {1C6981F8-0F5C-414C-9258-1D57EB2ED162}
+								{6DF45AAA-31C5-44B3-93BF-844EB61A004D} = {1C6981F8-0F5C-414C-9258-1D57EB2ED162}
 #endif
 #if (useGrpc)
 		{7BDCA684-0AFC-45A5-B721-1308734E65D2} = {1C6981F8-0F5C-414C-9258-1D57EB2ED162}
@@ -81,10 +81,10 @@ Global
 		{6E752D22-35D7-47C2-AEF8-F9D733E8D086}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E752D22-35D7-47C2-AEF8-F9D733E8D086}.Release|Any CPU.Build.0 = Release|Any CPU
 #if (useApi)
-        {6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Release|Any CPU.Build.0 = Release|Any CPU
+								{6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+								{6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+								{6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+								{6DF45AAA-31C5-44B3-93BF-844EB61A004D}.Release|Any CPU.Build.0 = Release|Any CPU
 #endif
 #if (useGrpc)
 		{7BDCA684-0AFC-45A5-B721-1308734E65D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

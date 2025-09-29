@@ -1,4 +1,4 @@
-using CleanArchitecture.Grpc.Services;
+using CleanArchitecture.Presentation.Grpc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

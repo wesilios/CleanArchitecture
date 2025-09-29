@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Chroma.Api.Controllers;
+namespace Chroma.Presentation.Api.Controllers;
 
 [Route("[controller]")]
 public class HealthCheckController : ControllerBase
@@ -8,6 +8,6 @@ public class HealthCheckController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok("Chroma.Api is healthy");
+        return Ok("Chroma.Presentation.Api is healthy");
     }
 }

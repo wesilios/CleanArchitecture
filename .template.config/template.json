@@ -3,12 +3,12 @@
   "author": "Que Nguyen",
   "classifications": [
     "ASP.NET",
-    "Clean Architecture",
+    "CleanArchitecture",
     "DDD",
     "Web",
     "gRPC",
-    "Razor Pages",
-    "Azure Infrastructure"
+    "RazorPages",
+    "AzureInfrastructure"
   ],
   "identity": "Clean.Architecture.Solution",
   "name": "Clean Architecture Solution",
@@ -139,28 +139,28 @@
         {
           "condition": "(useAzure)",
           "exclude": [
-            "src/Applications/CleanArchitecture.Api/appsettings.Development.json",
+            "src/Applications/CleanArchitecture.Presentation.Api/appsettings.Development.json"
           ],
           "rename": {
-            "src/Presentations/CleanArchitecture.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Api/appsettings.Development.json"
+            "src/Presentations/CleanArchitecture.Presentation.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Presentation.Api/appsettings.Development.json"
           }
         },
         {
           "condition": "(!useApi)",
           "exclude": [
-            "src/Presentations/CleanArchitecture.Api/**"
+            "src/Presentations/CleanArchitecture.Presentation.Api/**"
           ]
         },
         {
           "condition": "(!useGrpc)",
           "exclude": [
-            "src/Presentations/CleanArchitecture.Grpc/**"
+            "src/Presentations/CleanArchitecture.Presentation.Grpc/**"
           ]
         },
         {
           "condition": "(!useRazorPages)",
           "exclude": [
-            "src/Presentations/CleanArchitecture.Web/**"
+            "src/Presentations/CleanArchitecture.Presentation.Web/**"
           ]
         }
       ]

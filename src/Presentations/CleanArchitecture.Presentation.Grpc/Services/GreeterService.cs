@@ -1,6 +1,6 @@
 using Grpc.Core;
 
-namespace CleanArchitecture.Grpc.Services;
+namespace CleanArchitecture.Presentation.Grpc.Services;
 
 public class GreeterService : Greeter.GreeterBase
 {
