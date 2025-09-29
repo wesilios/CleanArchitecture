@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Chroma.Infrastructure.Azure;
 using Chroma.Presentation.Api;
 using Serilog;
 
@@ -13,7 +14,7 @@ var configurationBuilder = new ConfigurationBuilder()
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
-    builder.Configuration.AddKeyVault();
+builder.Configuration.AddKeyVault();
 
 var configuration = builder.Configuration;
 var version = configuration.GetValue<string>("Version");

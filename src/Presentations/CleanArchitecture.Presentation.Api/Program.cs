@@ -1,4 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+#if (useAzure)
+using Chroma.Infrastructure.Azure;
+#endif
 using CleanArchitecture.Presentation.Api;
 using Serilog;
 
@@ -14,7 +17,7 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 #if (useAzure)
-    builder.Configuration.AddKeyVault();
+builder.Configuration.AddKeyVault();
 #endif
 
 var configuration = builder.Configuration;
