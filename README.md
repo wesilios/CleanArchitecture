@@ -7,43 +7,65 @@ This project provides a foundational template for building a robust and maintain
 
 Domain-Centric Development: The Domains layer is the heart of the application. It contains the core business rules and logic, defined by entities and value objects that model the real-world domain.
 
-
 Separation of Concerns: The project is strictly separated into layers, ensuring that each component has a single, well-defined responsibility. This prevents coupling and allows for independent development and testing of each layer.
 
 Dependency Rule: Dependencies always point inward. The Infrastructure and Application layers depend on the Domain layer, but the Domain layer has no dependencies on any external components. This "inward-pointing" rule keeps the core business logic from being polluted by technology choices.
 
 ### Project Structure
     .
-    ├── .template.config/
-    │   ├── template.json
-    ├── src/ 
-    │   ├── Domains/ 
-    │   │   └── Domain/ # Domain entities, value objects, domain services 
+    ├── samples/                                                # Sample projects and documentation
+    ├── src/                                                    # Source code
+    │   ├── Domains/
+    │   │   └── CleanArchitecture.Domain/                       # Domain entities, value objects, domain services
     │   ├── Applications/
-    │   │   └── Application/ # Use cases, interfaces, DTOs, business logic 
-    │   └── Infrastructures/ 
-    │       └── Infrastructure/ # External concerns (database, web API, etc.)
+    │   │   └── CleanArchitecture.Application/                  # Use cases, interfaces, DTOs, business logic
+    │   ├── Infrastructures/
+    │   │   ├── CleanArchitecture.Infrastructure/               # Core infrastructure implementations
+    │   │   └── CleanArchitecture.Infrastructure.Azure/         # Azure-specific infrastructure
+    │   └── Presentations/
+    │       └── CleanArchitecture.Api/                          # RESTful API (ASP.NET Core)
     ├── tests/
-    │   └── Domains.UnitTests/ # Unit tests for domain layer
-    ├── CleanArchitecture.sln # Solution file
-    ├── global.json # .NET SDK version configuration
+    │   └── CleanArchitecture.Domain.UnitTests/                 # Unit tests for Domain layer
+    ├── CleanArchitecture.sln                                   # Solution file
+    ├── global.json                                             # .NET SDK version configuration
     └── README.md
 
 ### Layer Dependencies
 
-- **Domain Layer**: Contains enterprise business rules and entities. Has no dependencies on other layers.
-- **Application Layer**: Contains application business rules and use cases. Depends only on the Domain layer.
-- **Infrastructure Layer**: Contains implementations for external concerns. Depends on Application and Domain layers.
+- **Domain Layer** (`CleanArchitecture.Domain`): Contains enterprise business rules, entities, value objects, and domain services. Has no dependencies on other layers.
+- **Application Layer** (`CleanArchitecture.Application`): Contains application business rules, use cases, and interfaces. Depends only on the Domain layer.
+- **Infrastructure Layer**: Contains implementations for external concerns:
+  - `CleanArchitecture.Infrastructure`: Core infrastructure implementations (data access, etc.)
+  - `CleanArchitecture.Infrastructure.Azure`: Azure-specific implementations
+  - Depends on Application and Domain layers.
+- **Presentation Layer** (`CleanArchitecture.Api`): Contains the RESTful API controllers and entry points. Depends on Application and Domain layers.
+
+### Domain Layer Implementation
+
+The Domain layer includes several key components:
+
+- **Value Objects**: Rich domain objects with business logic and validation
+  - `Color`: Represents colors with RGB values and decimal opacity (0.0-1.0, rounded to 2 decimal places)
+    - Supports hex string parsing with alpha channel
+    - Provides color manipulation methods (lighten, darken, blend)
+    - Includes predefined color constants (Red, Blue, Green, etc.)
+- **Common**: Base classes like `ValueObject` for implementing value object equality
+- **Constants**: Domain-specific constants (e.g., `OidcConstants`)
+- **Exceptions**: Custom domain exceptions (e.g., `UnsupportedColorException`)
 
 ## Features
 
-- ✅ Clean Architecture structure
+- ✅ Clean Architecture structure with proper layer separation
 - ✅ .NET 8.0 support
-- ✅ ASP.NET Core integration
-- ✅ C# 12.0 features
-- ✅ Razor Pages support
-- ✅ Unit testing setup
-- ✅ Solution template configuration
+- ✅ ASP.NET Core Web API integration
+- ✅ C# 12.0 features with global using statements
+- ✅ Domain-Driven Design (DDD) implementation
+- ✅ Value Objects with business logic (e.g., Color with opacity management)
+- ✅ Unit testing setup with xUnit, FluentAssertions, and Shouldly
+- ✅ Azure infrastructure support
+- ✅ Dependency Injection configuration per layer
+- ✅ Structured logging with Serilog
+- ✅ Multiple environment configurations
 
 ## Getting Started
 

@@ -29,7 +29,7 @@ public class ColorTests
     {
         // Arrange
         int red = 255, green = 128, blue = 64;
-        decimal opacity = 1.0m;
+        var opacity = 1.0m;
 
         // Act
         var color = new Color(red, green, blue, opacity);
