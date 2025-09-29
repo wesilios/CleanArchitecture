@@ -1,74 +1,111 @@
-﻿namespace CleanArchitecture.Domain.ValueObjects;
+﻿using System.Text.RegularExpressions;
+
+namespace CleanArchitecture.Domain.ValueObjects;
 
 public class Color : ValueObject
 {
+    private const int MinColorValue = 0;
+    private const int MaxColorValue = 255;
+    private const decimal MinOpacityValue = decimal.Zero;
+    private const decimal MaxOpacityValue = decimal.One;
+
     public int RedPigment { get; }
     public int GreenPigment { get; }
     public int BluePigment { get; }
+    public decimal OpacityLevel { get; }
 
-    public static Color From(string code)
+    public static Color CreateFromHex(string hexCode)
     {
-        var colour = new Color(code);
+        var color = new Color(hexCode);
 
-        if (!SupportedColors.Contains(colour))
+        if (!SupportedColors.Contains(color))
         {
-            throw new UnsupportedColorException(code);
+            throw new UnsupportedColorException(hexCode);
         }
 
-        return colour;
+        return color;
     }
 
-    public static Color White => new(255, 255, 255);
-    public static Color Red => new(255, 87, 51);
-    public static Color Orange => new(255, 195, 0);
-    public static Color Yellow => new(255, 255, 102);
-    public static Color Green => new(204, 255, 153);
-    public static Color Blue => new(102, 102, 255);
+    public static Color White => new(MaxColorValue, MaxColorValue, MaxColorValue);
+    public static Color Red => new(MaxColorValue, 87, 51);
+    public static Color Orange => new(MaxColorValue, 195, 0);
+    public static Color Yellow => new(MaxColorValue, MaxColorValue, 102);
+    public static Color Green => new(204, MaxColorValue, 153);
+    public static Color Blue => new(102, 102, MaxColorValue);
     public static Color Purple => new(153, 102, 204);
     public static Color Grey => new(153, 153, 153);
+    public static Color Transparent => new(MinColorValue, MinColorValue, MinColorValue, MinOpacityValue);
 
-    public Color(int red, int green, int blue)
+    public Color(int red, int green, int blue, decimal opacity = MaxOpacityValue)
     {
         // Validation is done inside the constructor
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255)
+        if (red < MinColorValue || red > MaxColorValue ||
+            green < MinColorValue || green > MaxColorValue ||
+            blue < MinColorValue || blue > MaxColorValue)
         {
-            throw new ArgumentOutOfRangeException("Color values must be between 0 and 255.");
+            throw new ArgumentOutOfRangeException($"Color values must be between {MinColorValue} and {MaxColorValue}.");
+        }
+
+        if (opacity < MinOpacityValue || opacity > MaxOpacityValue)
+        {
+            throw new ArgumentOutOfRangeException(
+                $"Opacity value must be between {MinOpacityValue} and {MaxOpacityValue}.");
         }
 
         RedPigment = red;
         GreenPigment = green;
         BluePigment = blue;
+        OpacityLevel = Math.Round(opacity, 2);
     }
 
     public Color(string hexValue)
     {
-        // Add validation to ensure the hexValue is valid.
-        // For simplicity, this example assumes valid input.
+        if (string.IsNullOrWhiteSpace(hexValue))
+        {
+            throw new ArgumentException("Hex value cannot be null or empty.", nameof(hexValue));
+        }
+
         if (hexValue.StartsWith("#"))
         {
             hexValue = hexValue[1..];
         }
 
-        // Convert hex to integers
-        RedPigment = Convert.ToInt32(hexValue.Substring(0, 2), 16);
-        GreenPigment = Convert.ToInt32(hexValue.Substring(2, 2), 16);
-        BluePigment = Convert.ToInt32(hexValue.Substring(4, 2), 16);
-    }
+        if (hexValue.Length != 6 && hexValue.Length != 8)
+        {
+            throw new ArgumentException("Hex value must be 6 or 8 characters long.", nameof(hexValue));
+        }
 
+        if (!Regex.IsMatch(hexValue, "^[0-9A-Fa-f]+$"))
+        {
+            throw new ArgumentException("Hex value contains invalid characters.", nameof(hexValue));
+        }
+
+        try
+        {
+            RedPigment = Convert.ToInt32(hexValue.Substring(0, 2), 16);
+            GreenPigment = Convert.ToInt32(hexValue.Substring(2, 2), 16);
+            BluePigment = Convert.ToInt32(hexValue.Substring(4, 2), 16);
+            OpacityLevel = hexValue.Length == 8
+                ? Math.Round(Convert.ToInt32(hexValue.Substring(6, 2), 16) / 255m, 2)
+                : MaxOpacityValue;
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException($"Invalid hex value: {hexValue}", nameof(hexValue), ex);
+        }
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return ToHexString();
+        yield return RedPigment;
+        yield return GreenPigment;
+        yield return BluePigment;
+        yield return OpacityLevel;
     }
 
-    public override int GetHashCode()
+    public static explicit operator Color(string hexCode)
     {
-        return HashCode.Combine(RedPigment, GreenPigment, BluePigment);
-    }
-    
-    public static explicit operator Color(string code)
-    {
-        return From(code);
+        return CreateFromHex(hexCode);
     }
 
     public override string ToString()
@@ -88,11 +125,70 @@ public class Color : ValueObject
             yield return Blue;
             yield return Purple;
             yield return Grey;
+            yield return Transparent;
         }
     }
 
-    public string ToHexString()
+    public string ToHexString(bool includeOpacity = false)
     {
+        if (includeOpacity)
+        {
+            var opacityByte = (int)Math.Round(OpacityLevel * MaxColorValue);
+            return $"#{RedPigment:X2}{GreenPigment:X2}{BluePigment:X2}{opacityByte:X2}";
+        }
+
         return $"#{RedPigment:X2}{GreenPigment:X2}{BluePigment:X2}";
     }
+
+    public Color BlendWith(Color other, decimal ratio = 0.5m)
+    {
+        if (ratio < MinOpacityValue || ratio > MaxOpacityValue)
+        {
+            throw new ArgumentOutOfRangeException(nameof(ratio), "Blend ratio must be between 0.0 and 1.0");
+        }
+
+        var blendedRed = (int)(RedPigment * (MaxOpacityValue - ratio) + other.RedPigment * ratio);
+        var blendedGreen = (int)(GreenPigment * (MaxOpacityValue - ratio) + other.GreenPigment * ratio);
+        var blendedBlue = (int)(BluePigment * (MaxOpacityValue - ratio) + other.BluePigment * ratio);
+        var blendedOpacity = OpacityLevel * (MaxOpacityValue - ratio) + other.OpacityLevel * ratio;
+
+        return new Color(blendedRed, blendedGreen, blendedBlue, blendedOpacity);
+    }
+
+    public Color Lighten(decimal factor = 0.2m)
+    {
+        if (factor < MinOpacityValue || factor > MaxOpacityValue)
+        {
+            throw new ArgumentOutOfRangeException(nameof(factor), "Lightening factor must be between 0.0 and 1.0");
+        }
+
+        var lightenedRed = Math.Min(MaxColorValue, (int)(RedPigment + (MaxColorValue - RedPigment) * factor));
+        var lightenedGreen = Math.Min(MaxColorValue, (int)(GreenPigment + (MaxColorValue - GreenPigment) * factor));
+        var lightenedBlue = Math.Min(MaxColorValue, (int)(BluePigment + (MaxColorValue - BluePigment) * factor));
+
+        return new Color(lightenedRed, lightenedGreen, lightenedBlue, OpacityLevel);
+    }
+
+    public Color Darken(decimal factor = 0.2m)
+    {
+        if (factor < MinOpacityValue || factor > MaxOpacityValue)
+        {
+            throw new ArgumentOutOfRangeException(nameof(factor), "Darkening factor must be between 0.0 and 1.0");
+        }
+
+        var darkenedRed = Math.Max(MinColorValue, (int)(RedPigment * (MaxOpacityValue - factor)));
+        var darkenedGreen = Math.Max(MinColorValue, (int)(GreenPigment * (MaxOpacityValue - factor)));
+        var darkenedBlue = Math.Max(MinColorValue, (int)(BluePigment * (MaxOpacityValue - factor)));
+
+        return new Color(darkenedRed, darkenedGreen, darkenedBlue, OpacityLevel);
+    }
+
+    public Color WithOpacity(decimal opacity)
+    {
+        return new Color(RedPigment, GreenPigment, BluePigment, opacity);
+    }
+
+    public bool IsTransparent => OpacityLevel == MinOpacityValue;
+
+    public bool IsOpaque => OpacityLevel == MaxOpacityValue;
 }

@@ -41,4 +41,14 @@ public abstract class ValueObject
 
         return hash.ToHashCode();
     }
+
+    public static bool operator ==(ValueObject left, ValueObject right)
+    {
+        return EqualOperator(left, right);
+    }
+
+    public static bool operator !=(ValueObject left, ValueObject right)
+    {
+        return NotEqualOperator(left, right);
+    }
 }

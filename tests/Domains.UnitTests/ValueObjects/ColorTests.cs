@@ -21,6 +21,24 @@ public class ColorTests
         color.RedPigment.Should().Be(red);
         color.GreenPigment.Should().Be(green);
         color.BluePigment.Should().Be(blue);
+        color.OpacityLevel.Should().Be(1); // Default opacity
+    }
+
+    [Fact]
+    public void Constructor_WithValidRgbaValues_ShouldCreateColor()
+    {
+        // Arrange
+        int red = 255, green = 128, blue = 64;
+        decimal opacity = 1.0m;
+
+        // Act
+        var color = new Color(red, green, blue, opacity);
+
+        // Assert
+        color.RedPigment.Should().Be(red);
+        color.GreenPigment.Should().Be(green);
+        color.BluePigment.Should().Be(blue);
+        color.OpacityLevel.Should().Be(opacity);
     }
 
     [Theory]
@@ -42,14 +60,30 @@ public class ColorTests
     }
 
     [Theory]
-    [InlineData("#FF0000", 255, 0, 0)]
-    [InlineData("#00FF00", 0, 255, 0)]
-    [InlineData("#0000FF", 0, 0, 255)]
-    [InlineData("#FFFFFF", 255, 255, 255)]
-    [InlineData("#000000", 0, 0, 0)]
-    [InlineData("FF0000", 255, 0, 0)] // Without # prefix
+    [InlineData(255, 255, 255, -0.1)]
+    [InlineData(255, 255, 255, 1.1)]
+    public void Constructor_WithInvalidOpacityValues_ShouldThrowArgumentOutOfRangeException(int red, int green,
+        int blue, decimal opacity)
+    {
+        // Act
+        Action act = () => new Color(red, green, blue, opacity);
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithMessage("*Opacity value must be between 0 and 1*");
+    }
+
+    [Theory]
+    [InlineData("#FF0000", 255, 0, 0, 1)]
+    [InlineData("#00FF00", 0, 255, 0, 1)]
+    [InlineData("#0000FF", 0, 0, 255, 1)]
+    [InlineData("#FFFFFF", 255, 255, 255, 1)]
+    [InlineData("#000000", 0, 0, 0, 1)]
+    [InlineData("FF0000", 255, 0, 0, 1)] // Without # prefix
+    [InlineData("#FF000080", 255, 0, 0, 0.50)] // With alpha channel
+    [InlineData("#00FF0000", 0, 255, 0, 0)] // Transparent green
     public void Constructor_WithValidHexString_ShouldCreateColor(string hexValue, int expectedRed, int expectedGreen,
-        int expectedBlue)
+        int expectedBlue, decimal expectedOpacity)
     {
         // Act
         var color = new Color(hexValue);
@@ -58,6 +92,25 @@ public class ColorTests
         color.RedPigment.Should().Be(expectedRed);
         color.GreenPigment.Should().Be(expectedGreen);
         color.BluePigment.Should().Be(expectedBlue);
+        color.OpacityLevel.Should().Be(expectedOpacity);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("#FF")]
+    [InlineData("#FFFFF")]
+    [InlineData("#GGGGGG")]
+    [InlineData("#12345")]
+    [InlineData("#1234567")]
+    [InlineData("#123456789")]
+    public void Constructor_WithInvalidHexString_ShouldThrowArgumentException(string invalidHex)
+    {
+        // Act
+        Action act = () => new Color(invalidHex);
+
+        // Assert
+        act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -67,7 +120,7 @@ public class ColorTests
         var whiteHex = "#FFFFFF";
 
         // Act
-        var color = Color.From(whiteHex);
+        var color = Color.CreateFromHex(whiteHex);
 
         // Assert
         color.Should().Be(Color.White);
@@ -80,7 +133,7 @@ public class ColorTests
         var unsupportedHex = "#123456";
 
         // Act
-        Action act = () => Color.From(unsupportedHex);
+        Action act = () => Color.CreateFromHex(unsupportedHex);
 
         // Assert
         act.Should().Throw<UnsupportedColorException>()
@@ -178,7 +231,10 @@ public class ColorTests
         var unsupportedHex = "#123456";
 
         // Act & Assert
-        var act = () => { var color = (Color)unsupportedHex; };
+        var act = () =>
+        {
+            var color = (Color)unsupportedHex;
+        };
         act.Should().Throw<UnsupportedColorException>();
     }
 
@@ -263,7 +319,8 @@ public class ColorTests
             Color.Green,
             Color.Blue,
             Color.Purple,
-            Color.Grey
+            Color.Grey,
+            Color.Transparent
         };
 
         // Act
@@ -276,17 +333,18 @@ public class ColorTests
 
     [Theory]
     [InlineData("#FF5733")] // Red
-    [InlineData("#FFC300")] // Orange  
+    [InlineData("#FFC300")] // Orange
     [InlineData("#FFFF66")] // Yellow
     [InlineData("#CCFF99")] // Green
     [InlineData("#6666FF")] // Blue
     [InlineData("#9966CC")] // Purple
     [InlineData("#999999")] // Grey
     [InlineData("#FFFFFF")] // White
+    [InlineData("#00000000")] // Transparent
     public void From_WithAllSupportedColors_ShouldNotThrowException(string colorHex)
     {
         // Act
-        Action act = () => Color.From(colorHex);
+        Action act = () => Color.CreateFromHex(colorHex);
 
         // Assert
         act.Should().NotThrow();
@@ -329,7 +387,7 @@ public class ColorTests
         var unsupportedHex = "#ABCDEF";
 
         // Act & Assert using Shouldly
-        Should.Throw<UnsupportedColorException>(() => Color.From(unsupportedHex))
+        Should.Throw<UnsupportedColorException>(() => Color.CreateFromHex(unsupportedHex))
             .Message.ShouldContain(unsupportedHex);
     }
 
@@ -357,6 +415,118 @@ public class ColorTests
         // Act & Assert using Shouldly
         color1.ShouldBe(color2);
         color1.Equals(color2).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void CreateFromHex_WithSupportedColorHex_ShouldReturnColor()
+    {
+        // Arrange
+        var whiteHex = "#FFFFFF";
+
+        // Act
+        var color = Color.CreateFromHex(whiteHex);
+
+        // Assert
+        color.Should().Be(Color.White);
+    }
+
+    [Fact]
+    public void BlendWith_WithValidRatio_ShouldReturnBlendedColor()
+    {
+        // Arrange
+        var red = new Color(255, 0, 0);
+        var blue = new Color(0, 0, 255);
+
+        // Act
+        var blended = red.BlendWith(blue, 0.5m);
+
+        // Assert
+        blended.RedPigment.Should().Be(127);
+        blended.GreenPigment.Should().Be(0);
+        blended.BluePigment.Should().Be(127);
+    }
+
+    [Fact]
+    public void Lighten_WithValidFactor_ShouldReturnLighterColor()
+    {
+        // Arrange
+        var darkGray = new Color(100, 100, 100);
+
+        // Act
+        var lightened = darkGray.Lighten(0.5m);
+
+        // Assert
+        lightened.RedPigment.Should().BeGreaterThan(100);
+        lightened.GreenPigment.Should().BeGreaterThan(100);
+        lightened.BluePigment.Should().BeGreaterThan(100);
+    }
+
+    [Fact]
+    public void Darken_WithValidFactor_ShouldReturnDarkerColor()
+    {
+        // Arrange
+        var lightGray = new Color(200, 200, 200);
+
+        // Act
+        var darkened = lightGray.Darken(0.5m);
+
+        // Assert
+        darkened.RedPigment.Should().BeLessThan(200);
+        darkened.GreenPigment.Should().BeLessThan(200);
+        darkened.BluePigment.Should().BeLessThan(200);
+    }
+
+    [Fact]
+    public void WithOpacity_ShouldReturnColorWithNewOpacity()
+    {
+        // Arrange
+        var color = Color.Red;
+
+        // Act
+        var semiTransparent = color.WithOpacity(0.50m);
+
+        // Assert
+        semiTransparent.OpacityLevel.Should().Be(0.50m);
+        semiTransparent.RedPigment.Should().Be(color.RedPigment);
+        semiTransparent.GreenPigment.Should().Be(color.GreenPigment);
+        semiTransparent.BluePigment.Should().Be(color.BluePigment);
+    }
+
+    [Fact]
+    public void IsTransparent_WithZeroOpacity_ShouldReturnTrue()
+    {
+        // Arrange
+        var transparent = Color.Transparent;
+
+        // Act & Assert
+        transparent.IsTransparent.Should().BeTrue();
+        transparent.IsOpaque.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsOpaque_WithFullOpacity_ShouldReturnTrue()
+    {
+        // Arrange
+        var opaque = Color.White;
+
+        // Act & Assert
+        opaque.IsOpaque.Should().BeTrue();
+        opaque.IsTransparent.Should().BeFalse();
+    }
+
+    [Fact]
+    public void ToHexString_WithOpacity_ShouldIncludeAlphaChannel()
+    {
+        // Arrange
+        var color = new Color(255, 128, 64, 0.50m);
+
+        // Act
+        var hexWithOpacity = color.ToHexString(true);
+        var hexWithoutOpacity = color.ToHexString(false);
+
+        // Assert
+        hexWithOpacity.Should().Be("#FF804080");
+        hexWithoutOpacity.Should().Be("#FF8040");
     }
 
     // Helper method to access protected SupportedColors property

@@ -7,7 +7,7 @@
         <RootNamespace>CleanArchitecture.Domain.UnitTests</RootNamespace>
         <AssemblyName>CleanArchitecture.Domain.UnitTests</AssemblyName>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="8.7.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -18,9 +18,9 @@
         <PackageReference Include="Shouldly" Version="4.3.0" />
         <PackageReference Include="xunit" Version="2.9.3" />
     </ItemGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Domains\Domain\Domain.csproj" />
+        <ProjectReference Include="..\..\src\Domains\Domain\Domain.csproj" />
     </ItemGroup>
 
 </Project>
