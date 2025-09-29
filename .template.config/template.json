@@ -21,14 +21,29 @@
   "sourceName": "CleanArchitecture",
   "preferNameDirectory": true,
   "symbols": {
-    "port": {
+    "iisExpressPort": {
       "type": "generated",
-      "generator": "random",
+      "generator": "port",
       "parameters": {
-        "min": 5000,
-        "max": 65000
+        "fallback":"58375"
       },
       "replaces": "58375"
+    },
+    "httpPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"5285"
+      },
+      "replaces": "5285"
+    },
+    "httpsPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"7190"
+      },
+      "replaces": "7190"
     },
     "targetFramework": {
       "type": "parameter",
@@ -113,18 +128,18 @@
         "**/*.user",
         "**/*.lock.json",
         "*.nuspec",
-        "README.md",
-        "LICENSE",
         "bin/**",
         "obj/**",
         "**/bin/**",
-        "**/obj/**"
+        "**/obj/**",
+        "README.md",
+        "LICENSE"
       ],
       "modifiers": [
         {
           "condition": "(useAzure)",
           "exclude": [
-            "src/Applications/CleanArchitecture.Api/appsettings.Development.json"
+            "src/Applications/CleanArchitecture.Api/appsettings.Development.json",
           ],
           "rename": {
             "src/Presentations/CleanArchitecture.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Api/appsettings.Development.json"
@@ -148,6 +163,14 @@
             "src/Presentations/CleanArchitecture.Web/**"
           ]
         }
+      ]
+    }
+  ],
+  "modifiers": [
+    {
+      "exclude": [
+        "README.md",
+        "LICENSE"
       ]
     }
   ]

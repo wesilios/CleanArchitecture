@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using CleanArchitecture.Api;
+using Chroma.Api;
 using Serilog;
 
 [assembly: ExcludeFromCodeCoverage]
@@ -13,9 +13,7 @@ var configurationBuilder = new ConfigurationBuilder()
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
-#if (useAzure)
     builder.Configuration.AddKeyVault();
-#endif
 
 var configuration = builder.Configuration;
 var version = configuration.GetValue<string>("Version");
@@ -38,7 +36,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"CleanArchitecture Api {version}"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"Chroma Api {version}"));
 }
 
 app.UseHttpsRedirection();

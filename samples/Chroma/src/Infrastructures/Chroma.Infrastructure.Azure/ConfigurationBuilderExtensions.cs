@@ -3,7 +3,7 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
 
-namespace CleanArchitecture.Infrastructure.Azure;
+namespace Chroma.Infrastructure.Azure;
 
 public static class ConfigurationBuilderExtensions
 {
