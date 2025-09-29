@@ -7,43 +7,68 @@ This project provides a foundational template for building a robust and maintain
 
 Domain-Centric Development: The Domains layer is the heart of the application. It contains the core business rules and logic, defined by entities and value objects that model the real-world domain.
 
-
 Separation of Concerns: The project is strictly separated into layers, ensuring that each component has a single, well-defined responsibility. This prevents coupling and allows for independent development and testing of each layer.
 
 Dependency Rule: Dependencies always point inward. The Infrastructure and Application layers depend on the Domain layer, but the Domain layer has no dependencies on any external components. This "inward-pointing" rule keeps the core business logic from being polluted by technology choices.
 
 ### Project Structure
     .
-    ├── .template.config/
-    │   ├── template.json
-    ├── src/ 
-    │   ├── Domains/ 
-    │   │   └── Domain/ # Domain entities, value objects, domain services 
+    ├── samples/                                                # Sample projects and documentation
+    ├── src/                                                    # Source code
+    │   ├── Domains/
+    │   │   └── CleanArchitecture.Domain/                       # Domain entities, value objects, domain services
     │   ├── Applications/
-    │   │   └── Application/ # Use cases, interfaces, DTOs, business logic 
-    │   └── Infrastructures/ 
-    │       └── Infrastructure/ # External concerns (database, web API, etc.)
+    │   │   └── CleanArchitecture.Application/                  # Use cases, interfaces, DTOs, business logic
+    │   ├── Infrastructures/
+    │   │   ├── CleanArchitecture.Infrastructure/               # Core infrastructure implementations
+    │   │   └── CleanArchitecture.Infrastructure.Azure/         # Azure-specific infrastructure
+    │   ├── Presentations/
+    │   │   ├── CleanArchitecture.Api/                          # RESTful API (ASP.NET Core)
+    │   │   ├── CleanArchitecture.Grpc/                         # gRPC services
+    │   │   ├── CleanArchitecture.Web/                          # Web UI (Razor Pages)
+    │   │   └── CleanArchitecture.Jobs/                         # Background jobs and workers (to be added)
     ├── tests/
-    │   └── Domains.UnitTests/ # Unit tests for domain layer
-    ├── CleanArchitecture.sln # Solution file
-    ├── global.json # .NET SDK version configuration
+    │   └── CleanArchitecture.Domain.UnitTests/                 # Unit tests for Domain layer
+    ├── CleanArchitecture.sln                                   # Solution file
+    ├── global.json                                             # .NET SDK version configuration
     └── README.md
 
 ### Layer Dependencies
 
-- **Domain Layer**: Contains enterprise business rules and entities. Has no dependencies on other layers.
-- **Application Layer**: Contains application business rules and use cases. Depends only on the Domain layer.
-- **Infrastructure Layer**: Contains implementations for external concerns. Depends on Application and Domain layers.
+- **Domain Layer** (`CleanArchitecture.Domain`): Contains enterprise business rules, entities, value objects, and domain services. Has no dependencies on other layers.
+- **Application Layer** (`CleanArchitecture.Application`): Contains application business rules, use cases, and interfaces. Depends only on the Domain layer.
+- **Infrastructure Layer**: Contains implementations for external concerns:
+  - `CleanArchitecture.Infrastructure`: Core infrastructure implementations (data access, etc.)
+  - `CleanArchitecture.Infrastructure.Azure`: Azure-specific implementations
+  - Depends on Application and Domain layers.
+- **Presentation Layer**: Contains user interfaces and entry points. Depends on Application and Domain layers.
+  - `CleanArchitecture.Api`: RESTful API (ASP.NET Core Web API)
+  - `CleanArchitecture.Grpc`: gRPC services for high-performance communication
+  - `CleanArchitecture.Web`: Web UI using Razor Pages
+- **Jobs Layer** (planned): Background jobs and workers for asynchronous processing.
+
+### Domain Layer Implementation
+
+The Domain layer includes:
+
+- **Value Objects**: Rich domain objects with business logic (e.g., Color with RGB and opacity)
+- **Common**: Base classes like `ValueObject` for implementing value object equality
+- **Constants**: Domain-specific constants
+- **Exceptions**: Custom domain exceptions
 
 ## Features
 
-- ✅ Clean Architecture structure
+- ✅ Clean Architecture structure with proper layer separation
 - ✅ .NET 8.0 support
-- ✅ ASP.NET Core integration
-- ✅ C# 12.0 features
-- ✅ Razor Pages support
-- ✅ Unit testing setup
-- ✅ Solution template configuration
+- ✅ Multiple presentation options (Web API, gRPC, Razor Pages)
+- ✅ C# 12.0 features with global using statements
+- ✅ Domain-Driven Design (DDD) implementation
+- ✅ Value Objects with business logic (e.g., Color with opacity management)
+- ✅ Unit testing setup with xUnit, FluentAssertions, and Shouldly
+- ✅ Azure infrastructure support
+- ✅ Dependency Injection configuration per layer
+- ✅ Structured logging with Serilog
+- ✅ Multiple environment configurations
 
 ## Getting Started
 
