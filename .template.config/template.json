@@ -3,8 +3,12 @@
   "author": "Que Nguyen",
   "classifications": [
     "ASP.NET",
+    "Clean Architecture",
+    "DDD",
     "Web",
-    "Clean Architecture"
+    "gRPC",
+    "Razor Pages",
+    "Azure Infrastructure"
   ],
   "identity": "Clean.Architecture.Solution",
   "name": "Clean Architecture Solution",
@@ -17,7 +21,33 @@
   "sourceName": "CleanArchitecture",
   "preferNameDirectory": true,
   "symbols": {
-    "Database": {
+    "port": {
+      "type": "generated",
+      "generator": "random",
+      "parameters": {
+        "min": 5000,
+        "max": 65000
+      },
+      "replaces": "58375"
+    },
+    "targetFramework": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net8.0",
+          "description": ".NET 8.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": ".NET 6.0"
+        }
+      ],
+      "defaultValue": "net8.0",
+      "replaces": "net8.0",
+      "description": "The target framework for the projects solution."
+    },
+    "database": {
       "type": "parameter",
       "datatype": "choice",
       "choices": [
@@ -33,19 +63,37 @@
       "defaultValue": "sqlserver",
       "description": "The database type to use."
     },
-    "UseAzure": {
+    "useAzure": {
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "true",
       "description": "Whether to use Azure services."
     },
-    "UseSqlite": {
+    "useSqlite": {
       "type": "computed",
-      "value": "(Database == \"sqlite\")"
+      "value": "(database == \"sqlite\")"
     },
-    "UseSqlServer": {
+    "useSqlServer": {
       "type": "computed",
-      "value": "(Database == \"sqlserver\")"
+      "value": "(database == \"sqlserver\")"
+    },
+    "useApi": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Whether to include Web API."
+    },
+    "useGrpc": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include gRPC."
+    },
+    "useRazorPages": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include Razor Pages."
     }
   },
   "sources": [
@@ -74,22 +122,31 @@
       ],
       "modifiers": [
         {
-          "condition": "(UseSqlServer)",
-          "include": [
-            "src/Applications/Application/appsettings.Development.json"
-          ]
-        },
-        {
-          "condition": "(UseSqlite)",
-          "include": [
-            "src/Applications/Application/appsettings.Development.json"
-          ]
-        },
-        {
-          "condition": "(UseAzure)",
+          "condition": "(useAzure)",
+          "exclude": [
+            "src/Applications/CleanArchitecture.Api/appsettings.Development.json"
+          ],
           "rename": {
-            "src/Applications/Application/appsettings.UseAzure.json": "src/Applications/Application/appsettings.Development.json"
+            "src/Presentations/CleanArchitecture.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Api/appsettings.Development.json"
           }
+        },
+        {
+          "condition": "(!useApi)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Api/**"
+          ]
+        },
+        {
+          "condition": "(!useGrpc)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Grpc/**"
+          ]
+        },
+        {
+          "condition": "(!useRazorPages)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Web/**"
+          ]
         }
       ]
     }

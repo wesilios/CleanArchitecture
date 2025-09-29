@@ -22,8 +22,11 @@ Dependency Rule: Dependencies always point inward. The Infrastructure and Applic
     │   ├── Infrastructures/
     │   │   ├── CleanArchitecture.Infrastructure/               # Core infrastructure implementations
     │   │   └── CleanArchitecture.Infrastructure.Azure/         # Azure-specific infrastructure
-    │   └── Presentations/
-    │       └── CleanArchitecture.Api/                          # RESTful API (ASP.NET Core)
+    │   ├── Presentations/
+    │   │   ├── CleanArchitecture.Api/                          # RESTful API (ASP.NET Core)
+    │   │   ├── CleanArchitecture.Grpc/                         # gRPC services
+    │   │   ├── CleanArchitecture.Web/                          # Web UI (Razor Pages)
+    │   │   └── CleanArchitecture.Jobs/                         # Background jobs and workers (to be added)
     ├── tests/
     │   └── CleanArchitecture.Domain.UnitTests/                 # Unit tests for Domain layer
     ├── CleanArchitecture.sln                                   # Solution file
@@ -38,26 +41,26 @@ Dependency Rule: Dependencies always point inward. The Infrastructure and Applic
   - `CleanArchitecture.Infrastructure`: Core infrastructure implementations (data access, etc.)
   - `CleanArchitecture.Infrastructure.Azure`: Azure-specific implementations
   - Depends on Application and Domain layers.
-- **Presentation Layer** (`CleanArchitecture.Api`): Contains the RESTful API controllers and entry points. Depends on Application and Domain layers.
+- **Presentation Layer**: Contains user interfaces and entry points. Depends on Application and Domain layers.
+  - `CleanArchitecture.Api`: RESTful API (ASP.NET Core Web API)
+  - `CleanArchitecture.Grpc`: gRPC services for high-performance communication
+  - `CleanArchitecture.Web`: Web UI using Razor Pages
+- **Jobs Layer** (planned): Background jobs and workers for asynchronous processing.
 
 ### Domain Layer Implementation
 
-The Domain layer includes several key components:
+The Domain layer includes:
 
-- **Value Objects**: Rich domain objects with business logic and validation
-  - `Color`: Represents colors with RGB values and decimal opacity (0.0-1.0, rounded to 2 decimal places)
-    - Supports hex string parsing with alpha channel
-    - Provides color manipulation methods (lighten, darken, blend)
-    - Includes predefined color constants (Red, Blue, Green, etc.)
+- **Value Objects**: Rich domain objects with business logic (e.g., Color with RGB and opacity)
 - **Common**: Base classes like `ValueObject` for implementing value object equality
-- **Constants**: Domain-specific constants (e.g., `OidcConstants`)
-- **Exceptions**: Custom domain exceptions (e.g., `UnsupportedColorException`)
+- **Constants**: Domain-specific constants
+- **Exceptions**: Custom domain exceptions
 
 ## Features
 
 - ✅ Clean Architecture structure with proper layer separation
 - ✅ .NET 8.0 support
-- ✅ ASP.NET Core Web API integration
+- ✅ Multiple presentation options (Web API, gRPC, Razor Pages)
 - ✅ C# 12.0 features with global using statements
 - ✅ Domain-Driven Design (DDD) implementation
 - ✅ Value Objects with business logic (e.g., Color with opacity management)

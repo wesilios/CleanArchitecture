@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
         
         services.AddDbContextFactory<ApplicationDbContext>(options =>
         {
-#if (UseSqlite)
+#if (useSqlite)
             options.UseSqlite(connectionString);
 #else
             options.UseSqlServer(connectionString);

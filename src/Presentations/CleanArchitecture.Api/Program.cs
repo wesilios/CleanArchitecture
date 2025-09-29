@@ -13,7 +13,7 @@ var configurationBuilder = new ConfigurationBuilder()
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
-#if (UseAzure)
+#if (useAzure)
     builder.Configuration.AddAzureKeyVault();
 #endif
 

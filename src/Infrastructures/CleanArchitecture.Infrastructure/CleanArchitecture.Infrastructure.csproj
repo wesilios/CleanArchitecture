@@ -16,10 +16,10 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.6" />
-        <!--#if (UseSqlite)-->
+        <!--#if (useSqlite)-->
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
         <!--#endif-->
-        <!--#if (UseSqlServer)-->
+        <!--#if (useSqlServer)-->
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
         <!--#endif-->
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
@@ -36,7 +36,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Domains\CleanArchitecture.Domain\CleanArchitecture.Domain.csproj" />
-        <!--#if (UseAzure)-->
+        <!--#if (useAzure)-->
         <ProjectReference Include="..\CleanArchitecture.Infrastructure.Azure\CleanArchitecture.Infrastructure.Azure.csproj" />
         <!--#endif-->
     </ItemGroup>
