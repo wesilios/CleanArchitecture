@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Que Nguyen",
+  "classifications": [ "APS.NET", "Web", "Clean Architecture" ],
+  "identity": "Clean.Architecture.Solution",
+  "name": "Clean Architecture Solution",
+  "description": "A Clean Architecture Solution Template for creating Web Applications and CI/CD pipeline with ASP.NET Core.",
+  "shortName": "cleanarchitecturesln",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net6.0"
+        },
+        {
+          "choice": "net8.0"
+        }
+      ],
+      "replaces": "{TargetFramework}"
+    },
+    "SwaggerSupported": {
+      "type": "parameter",
+      "description": "Enable swagger support",
+      "datatype": "bool",
+      "defaultValue": "true"
+    },
+    "IncludeDevAppSettings": {
+      "type": "parameter",
+      "description": "Adding appsettings.Development.json",
+      "datatype": "bool",
+      "defaultValue": "true,
+      "datatype": "bool",
+      "defaultValue": "true"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition" :"(!IncludeDevAppSettings)",
+          "exclude": [
+            "/appsettings.Development.json"
+          ]
+        }
+      ]
+    }
+  ]
+}
