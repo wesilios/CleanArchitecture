@@ -4,6 +4,10 @@ namespace Chroma.Domain.ValueObjects;
 
 public class Color : ValueObject
 {
+    public Color()
+    {
+    }
+
     private const int MinColorValue = 0;
     private const int MaxColorValue = 255;
     private const decimal MinOpacityValue = decimal.Zero;
@@ -12,7 +16,7 @@ public class Color : ValueObject
     public int RedPigment { get; }
     public int GreenPigment { get; }
     public int BluePigment { get; }
-    public decimal OpacityLevel { get; }
+    public decimal Opacity { get; }
 
     public static Color CreateFromHex(string hexCode)
     {
@@ -55,7 +59,7 @@ public class Color : ValueObject
         RedPigment = red;
         GreenPigment = green;
         BluePigment = blue;
-        OpacityLevel = Math.Round(opacity, 2);
+        Opacity = Math.Round(opacity, 2);
     }
 
     public Color(string hexValue)
@@ -85,7 +89,7 @@ public class Color : ValueObject
             RedPigment = Convert.ToInt32(hexValue.Substring(0, 2), 16);
             GreenPigment = Convert.ToInt32(hexValue.Substring(2, 2), 16);
             BluePigment = Convert.ToInt32(hexValue.Substring(4, 2), 16);
-            OpacityLevel = hexValue.Length == 8
+            Opacity = hexValue.Length == 8
                 ? Math.Round(Convert.ToInt32(hexValue.Substring(6, 2), 16) / 255m, 2)
                 : MaxOpacityValue;
         }
@@ -100,7 +104,7 @@ public class Color : ValueObject
         yield return RedPigment;
         yield return GreenPigment;
         yield return BluePigment;
-        yield return OpacityLevel;
+        yield return Opacity;
     }
 
     public static explicit operator Color(string hexCode)
@@ -129,11 +133,16 @@ public class Color : ValueObject
         }
     }
 
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(RedPigment, GreenPigment, BluePigment, Opacity);
+    }
+
     public string ToHexString(bool includeOpacity = false)
     {
         if (includeOpacity)
         {
-            var opacityByte = (int)Math.Round(OpacityLevel * MaxColorValue);
+            var opacityByte = (int)Math.Round(Opacity * MaxColorValue);
             return $"#{RedPigment:X2}{GreenPigment:X2}{BluePigment:X2}{opacityByte:X2}";
         }
 
@@ -150,7 +159,7 @@ public class Color : ValueObject
         var blendedRed = (int)(RedPigment * (MaxOpacityValue - ratio) + other.RedPigment * ratio);
         var blendedGreen = (int)(GreenPigment * (MaxOpacityValue - ratio) + other.GreenPigment * ratio);
         var blendedBlue = (int)(BluePigment * (MaxOpacityValue - ratio) + other.BluePigment * ratio);
-        var blendedOpacity = OpacityLevel * (MaxOpacityValue - ratio) + other.OpacityLevel * ratio;
+        var blendedOpacity = Opacity * (MaxOpacityValue - ratio) + other.Opacity * ratio;
 
         return new Color(blendedRed, blendedGreen, blendedBlue, blendedOpacity);
     }
@@ -166,7 +175,7 @@ public class Color : ValueObject
         var lightenedGreen = Math.Min(MaxColorValue, (int)(GreenPigment + (MaxColorValue - GreenPigment) * factor));
         var lightenedBlue = Math.Min(MaxColorValue, (int)(BluePigment + (MaxColorValue - BluePigment) * factor));
 
-        return new Color(lightenedRed, lightenedGreen, lightenedBlue, OpacityLevel);
+        return new Color(lightenedRed, lightenedGreen, lightenedBlue, Opacity);
     }
 
     public Color Darken(decimal factor = 0.2m)
@@ -180,7 +189,7 @@ public class Color : ValueObject
         var darkenedGreen = Math.Max(MinColorValue, (int)(GreenPigment * (MaxOpacityValue - factor)));
         var darkenedBlue = Math.Max(MinColorValue, (int)(BluePigment * (MaxOpacityValue - factor)));
 
-        return new Color(darkenedRed, darkenedGreen, darkenedBlue, OpacityLevel);
+        return new Color(darkenedRed, darkenedGreen, darkenedBlue, Opacity);
     }
 
     public Color WithOpacity(decimal opacity)
@@ -188,7 +197,7 @@ public class Color : ValueObject
         return new Color(RedPigment, GreenPigment, BluePigment, opacity);
     }
 
-    public bool IsTransparent => OpacityLevel == MinOpacityValue;
+    public bool IsTransparent => Opacity == MinOpacityValue;
 
-    public bool IsOpaque => OpacityLevel == MaxOpacityValue;
+    public bool IsOpaque => Opacity == MaxOpacityValue;
 }

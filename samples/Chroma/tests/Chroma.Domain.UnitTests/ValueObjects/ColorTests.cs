@@ -21,7 +21,7 @@ public class ColorTests
         color.RedPigment.Should().Be(red);
         color.GreenPigment.Should().Be(green);
         color.BluePigment.Should().Be(blue);
-        color.OpacityLevel.Should().Be(1); // Default opacity
+        color.Opacity.Should().Be(1); // Default opacity
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class ColorTests
         color.RedPigment.Should().Be(red);
         color.GreenPigment.Should().Be(green);
         color.BluePigment.Should().Be(blue);
-        color.OpacityLevel.Should().Be(opacity);
+        color.Opacity.Should().Be(opacity);
     }
 
     [Theory]
@@ -92,7 +92,7 @@ public class ColorTests
         color.RedPigment.Should().Be(expectedRed);
         color.GreenPigment.Should().Be(expectedGreen);
         color.BluePigment.Should().Be(expectedBlue);
-        color.OpacityLevel.Should().Be(expectedOpacity);
+        color.Opacity.Should().Be(expectedOpacity);
     }
 
     [Theory]
@@ -486,7 +486,7 @@ public class ColorTests
         var semiTransparent = color.WithOpacity(0.50m);
 
         // Assert
-        semiTransparent.OpacityLevel.Should().Be(0.50m);
+        semiTransparent.Opacity.Should().Be(0.50m);
         semiTransparent.RedPigment.Should().Be(color.RedPigment);
         semiTransparent.GreenPigment.Should().Be(color.GreenPigment);
         semiTransparent.BluePigment.Should().Be(color.BluePigment);

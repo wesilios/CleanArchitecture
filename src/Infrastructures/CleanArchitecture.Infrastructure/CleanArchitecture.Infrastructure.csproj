@@ -8,21 +8,21 @@
 
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.1.66" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.20" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.20" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.20">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.20"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.20"/>
         <!--#if (useSqlite)-->
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.20" />
         <!--#endif-->
         <!--#if (useSqlServer)-->
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.20"/>
         <!--#endif-->
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.20">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -30,11 +30,12 @@
         <PackageReference Include="Microsoft.Extensions.Logging"/>
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-        <PackageReference Include="Refit"/>
-        <PackageReference Include="Refit.HttpClientFactory"/>
+        <PackageReference Include="Refit" Version="8.0.0"/>
+        <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Applications\CleanArchitecture.Application\CleanArchitecture.Application.csproj" />
         <ProjectReference Include="..\..\Domains\CleanArchitecture.Domain\CleanArchitecture.Domain.csproj" />
         <!--#if (useAzure)-->
         <ProjectReference Include="..\CleanArchitecture.Infrastructure.Azure\CleanArchitecture.Infrastructure.Azure.csproj" />

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using CleanArchitecture.Application;
 using CleanArchitecture.Domain.Constants;
+using CleanArchitecture.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
@@ -20,7 +20,7 @@ namespace CleanArchitecture.Presentation.Api
                     options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 });
 
-            services.AddApplicationServices(configuration);
+            services.AddInfrastructureServices(configuration);
 
             services.Configure<ApiBehaviorOptions>(options => { });
 

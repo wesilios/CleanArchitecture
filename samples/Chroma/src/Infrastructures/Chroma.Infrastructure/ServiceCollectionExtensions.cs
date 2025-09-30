@@ -11,12 +11,12 @@ public static class ServiceCollectionExtensions
     {
         var connectionString = configuration.GetConnectionString("ChromaDb");
         
-        services.AddDbContextFactory<ApplicationDbContext>(options =>
+        services.AddDbContextFactory<ChromaDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
         });
         
-        services.AddScoped<IApplicationConnectionFactory, ApplicationConnectionFactory>(_ =>
-            new ApplicationConnectionFactory(connectionString));
+        services.AddScoped<IChromaConnectionFactory, ChromaConnectionFactory>(_ =>
+            new ChromaConnectionFactory(connectionString));
     }
 }

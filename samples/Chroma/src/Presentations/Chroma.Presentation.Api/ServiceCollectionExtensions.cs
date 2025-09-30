@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using Chroma.Application;
 using Chroma.Domain.Constants;
+using Chroma.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
@@ -20,7 +20,7 @@ namespace Chroma.Presentation.Api
                     options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 });
 
-            services.AddApplicationServices(configuration);
+            services.AddInfrastructureServices(configuration);
 
             services.Configure<ApiBehaviorOptions>(options => { });
 
