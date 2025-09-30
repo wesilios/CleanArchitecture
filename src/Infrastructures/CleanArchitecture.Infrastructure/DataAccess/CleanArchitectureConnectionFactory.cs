@@ -2,11 +2,11 @@
 
 namespace CleanArchitecture.Infrastructure.DataAccess;
 
-public abstract class SqlConnectionFactory : ISqlConnectionFactory
+public class CleanArchitectureConnectionFactory : ICleanArchitectureConnectionFactory
 {
     private readonly string _connectionString;
 
-    protected SqlConnectionFactory(string connectionString)
+    public CleanArchitectureConnectionFactory(string connectionString)
     {
         _connectionString = connectionString;
     }
@@ -17,7 +17,7 @@ public abstract class SqlConnectionFactory : ISqlConnectionFactory
     }
 }
 
-public interface ISqlConnectionFactory
+public interface ICleanArchitectureConnectionFactory
 {
     SqlConnection CreateConnection();
 }

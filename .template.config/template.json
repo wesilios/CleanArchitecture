@@ -133,6 +133,7 @@
         "**/bin/**",
         "**/obj/**",
         "README.md",
+        "**/README.md",
         "LICENSE"
       ],
       "modifiers": [
@@ -162,6 +163,11 @@
           "exclude": [
             "src/Presentations/CleanArchitecture.Presentation.Web/**"
           ]
+        },
+        {
+          "rename": {
+            "README.template.md": "README.md"
+          }
         }
       ]
     }

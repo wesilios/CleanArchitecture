@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
     {
         var connectionString = configuration.GetConnectionString("CleanArchitectureDb");
         
-        services.AddDbContextFactory<ApplicationDbContext>(options =>
+        services.AddDbContextFactory<CleanArchitectureDbContext>(options =>
         {
 #if (useSqlite)
             options.UseSqlite(connectionString);
@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
 #endif
         });
         
-        services.AddScoped<IApplicationConnectionFactory, ApplicationConnectionFactory>(_ =>
-            new ApplicationConnectionFactory(connectionString));
+        services.AddScoped<ICleanArchitectureConnectionFactory, CleanArchitectureConnectionFactory>(_ =>
+            new CleanArchitectureConnectionFactory(connectionString));
     }
 }

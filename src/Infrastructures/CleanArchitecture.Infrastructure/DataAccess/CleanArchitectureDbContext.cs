@@ -2,9 +2,9 @@
 
 namespace CleanArchitecture.Infrastructure.DataAccess;
 
-public class ApplicationDbContext : DbContext
+public class CleanArchitectureDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public CleanArchitectureDbContext(DbContextOptions<CleanArchitectureDbContext> options)
         : base(options)
     {
     }
