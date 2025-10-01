@@ -1,6 +1,8 @@
-﻿namespace Chroma.Application.Queries;
+﻿using Chroma.Application.DataObjects;
 
-public class GetPaletteByIdQuery
+namespace Chroma.Application.Queries;
+
+public class GetPaletteByIdQuery : IQuery<PaletteDto>
 {
     public long PaletteId { get; set; }
 }

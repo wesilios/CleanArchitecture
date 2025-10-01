@@ -20,8 +20,8 @@ Dependency Rule: Dependencies always point inward. The Infrastructure and Applic
     │   ├── Applications/
     │   │   └── CleanArchitecture.Application/                  # Use cases, interfaces, DTOs, business logic
     │   ├── Infrastructures/
-    │   │   ├── CleanArchitecture.Infrastructure/               # Core infrastructure implementations
-    │   │   └── CleanArchitecture.Infrastructure.Azure/         # Azure-specific infrastructure
+    │   │   ├── CleanArchitecture.Infrastructure/               # Core infrastructure implementations and shared adapters
+    │   │   └── CleanArchitecture.Infrastructure.Azure/         # Azure-Cloud-specific infrastructure Adapter
     │   ├── Presentations/
     │   │   ├── CleanArchitecture.Api/                          # RESTful API (ASP.NET Core)
     │   │   ├── CleanArchitecture.Grpc/                         # gRPC services
@@ -39,7 +39,7 @@ Dependency Rule: Dependencies always point inward. The Infrastructure and Applic
 - **Application Layer** (`CleanArchitecture.Application`): Contains application business rules, use cases, and interfaces. Depends only on the Domain layer.
 - **Infrastructure Layer**: Contains implementations for external concerns:
   - `CleanArchitecture.Infrastructure`: Core infrastructure implementations (data access, etc.)
-  - `CleanArchitecture.Infrastructure.Azure`: Azure-specific implementations
+  - `CleanArchitecture.Infrastructure.Azure`: Azure-Cloud-specific implementations Cloud SDK NuGet packages, specific connection secrets (in configuration), and cloud resource logic.
   - Depends on Application and Domain layers.
 - **Presentation Layer**: Contains user interfaces and entry points. Depends on Application and Domain layers.
   - `CleanArchitecture.Api`: RESTful API (ASP.NET Core Web API)

@@ -1,4 +1,4 @@
-﻿namespace Chroma.Application.Queries;
+﻿namespace Chroma.Application.DataObjects;
 
 public class PaletteDto
 {

@@ -1,6 +1,6 @@
 ﻿namespace Chroma.Application.Commands;
 
-public class AddColorToPaletteCommand
+public class AddColorToPaletteCommand : ICommand
 {
     public long PaletteId { get; set; }
     public int Red { get; set; }

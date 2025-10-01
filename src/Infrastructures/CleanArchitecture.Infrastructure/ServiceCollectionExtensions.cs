@@ -9,8 +9,21 @@ public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDataAccessServices(configuration);
+        services.AddApplicationServices();
+    }
+    
+    private static void AddApplicationServices(this IServiceCollection services)
+    {
+        // Register Query Services (the Infrastructure implementations)
+
+        // Register Repositories (the Infrastructure implementations)
+    }
+
+    private static void AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
+    {
         var connectionString = configuration.GetConnectionString("CleanArchitectureDb");
-        
+
         services.AddDbContextFactory<CleanArchitectureDbContext>(options =>
         {
 #if (useSqlite)
@@ -19,7 +32,7 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(connectionString);
 #endif
         });
-        
+
         services.AddScoped<ICleanArchitectureConnectionFactory, CleanArchitectureConnectionFactory>(_ =>
             new CleanArchitectureConnectionFactory(connectionString));
     }

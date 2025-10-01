@@ -1,21 +1,24 @@
-﻿using Chroma.Domain.Repositories;
+﻿using Chroma.Application.DataObjects;
+using Chroma.Application.Handlers.Abstractions;
+using Chroma.Application.Interfaces;
+using Chroma.Application.Queries;
 
-namespace Chroma.Application.Queries;
+namespace Chroma.Application.Handlers;
 
-public class GetPaletteByIdHandler
+public class GetPaletteByIdQueryHandler : IQueryHandler<GetPaletteByIdQuery, PaletteDto>
 {
-    private readonly IPaletteRepository _repository;
+    private readonly IPaletteQueryService _queryService;
 
-    public GetPaletteByIdHandler(IPaletteRepository repository)
+    public GetPaletteByIdQueryHandler(IPaletteQueryService queryService)
     {
-        _repository = repository;
+        _queryService = queryService;
     }
 
-    public async Task<PaletteDto> Handle(GetPaletteByIdQuery query)
+    public async Task<PaletteDto> HandleAsync(GetPaletteByIdQuery query)
     {
         // The read path often uses a lighter projection or direct database access
         // that bypasses the Domain model. Here, we use the Repository for simplicity.
-        var palette = await _repository.GetByIdAsync(query.PaletteId);
+        var palette = await _queryService.GetByIdAsync(query.PaletteId);
 
         if (palette == null) return null;
 
