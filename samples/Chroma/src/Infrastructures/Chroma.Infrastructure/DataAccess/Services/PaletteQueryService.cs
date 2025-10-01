@@ -1,4 +1,6 @@
-﻿using Chroma.Application.Interfaces;
+﻿using Chroma.Application.Common;
+using Chroma.Application.Interfaces;
+using Chroma.Application.Queries;
 using Chroma.Domain.Entities;
 
 namespace Chroma.Infrastructure.DataAccess.Services;
@@ -37,5 +39,10 @@ public class PaletteQueryService : IPaletteQueryService
 
         // Placeholder return:
         return new Palette("Test Palette");
+    }
+
+    public Task<PagedList<Palette>> GetGetAllPalettesAsync(GetAllPalettesQuery query)
+    {
+        throw new NotImplementedException();
     }
 }
