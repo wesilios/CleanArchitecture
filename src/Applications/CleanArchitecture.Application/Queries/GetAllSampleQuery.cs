@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Application.Common;
-
-namespace CleanArchitecture.Application.Queries;
+﻿namespace CleanArchitecture.Application.Queries;
 
 public class GetAllSampleQuery : PaginationParameters
 {

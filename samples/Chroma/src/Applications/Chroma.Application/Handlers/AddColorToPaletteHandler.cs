@@ -1,7 +1,4 @@
-﻿using Chroma.Application.Commands;
-using Chroma.Application.Handlers.Abstractions;
-using Chroma.Application.Interfaces;
-using Chroma.Domain.Repositories;
+﻿using Chroma.Domain.Repositories;
 using Chroma.Domain.ValueObjects;
 
 namespace Chroma.Application.Handlers;

@@ -1,7 +1,4 @@
-﻿using Chroma.Application.Commands;
-using Chroma.Application.Handlers.Abstractions;
-
-namespace Chroma.Application.Handlers;
+﻿namespace Chroma.Application.Handlers;
 
 public class AddPaletteCommandHandler : ICommandHandler<AddPaletteCommand>
 {

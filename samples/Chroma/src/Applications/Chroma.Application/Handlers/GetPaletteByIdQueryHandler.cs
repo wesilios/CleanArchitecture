@@ -1,9 +1,4 @@
-﻿using Chroma.Application.DataObjects;
-using Chroma.Application.Handlers.Abstractions;
-using Chroma.Application.Interfaces;
-using Chroma.Application.Queries;
-
-namespace Chroma.Application.Handlers;
+﻿namespace Chroma.Application.Handlers;
 
 public class GetPaletteByIdQueryHandler : IQueryHandler<GetPaletteByIdQuery, PaletteDto>
 {

@@ -1,8 +1,4 @@
-﻿using CleanArchitecture.Application.Commands;
-using CleanArchitecture.Application.Handlers.Abstractions;
-using CleanArchitecture.Application.Interfaces;
-using CleanArchitecture.Application.Queries;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace CleanArchitecture.Application;
 

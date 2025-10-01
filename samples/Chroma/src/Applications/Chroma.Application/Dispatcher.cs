@@ -1,8 +1,4 @@
-﻿using Chroma.Application.Commands;
-using Chroma.Application.Handlers.Abstractions;
-using Chroma.Application.Interfaces;
-using Chroma.Application.Queries;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Chroma.Application;
 

@@ -1,7 +1,4 @@
-﻿using CleanArchitecture.Application.Commands;
-using CleanArchitecture.Application.Queries;
-
-namespace CleanArchitecture.Application.Interfaces;
+﻿namespace CleanArchitecture.Application.Interfaces;
 
 public interface IDispatcher
 {
