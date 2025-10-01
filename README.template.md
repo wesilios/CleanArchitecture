@@ -10,15 +10,23 @@ Welcome to your new project generated with the Clean Architecture template!
   ```
 - Run the application:
   ```sh
-  dotnet run --project src/Presentations/CleanArchitecture.Presentation.Web/CleanArchitecture.Presentation.Api.csproj
+  dotnet run --project src/Presentations/CleanArchitecture.Presentation.Web/
   ```
 - Adding migrations (if using EF Core):
   ```sh
-  dotnet ef migrations add InitialCreate -p src/CleanArchitecture.Infrastructure/ -s src/CleanArchitecture.Api/ -v
+  dotnet ef migrations add InitialCreate \
+    -p src/CleanArchitecture.Infrastructure/ \
+    -s src/CleanArchitecture.Api/ \
+    -o DataAccess/Migrations/ \
+    -v
   ```
 - Update the database (if using EF Core):
   ```sh
-  dotnet ef database update -c AppDbContext -p src/CleanArchitecture.Infrastructure/ -s src/CleanArchitecture.Api/ -v
+  dotnet ef database update \
+    -c CleanArchitectureDbContext \
+    -p src/CleanArchitecture.Infrastructure/ \
+    -s src/CleanArchitecture.Api/ \
+    -v
   ```
 
 ## Solution Structure

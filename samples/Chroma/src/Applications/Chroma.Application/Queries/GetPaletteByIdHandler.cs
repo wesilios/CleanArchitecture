@@ -22,7 +22,7 @@ public class GetPaletteByIdHandler
         // Map the Domain Entity to the Read DTO
         return new PaletteDto
         {
-            PaletteId = palette.Id,
+            PaletteId = palette.PaletteId,
             Name = palette.Name,
             Colors = palette.Colors.Select(c => new ColorDto
             {

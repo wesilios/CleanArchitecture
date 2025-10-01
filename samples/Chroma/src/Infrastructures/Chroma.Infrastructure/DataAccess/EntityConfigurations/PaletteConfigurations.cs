@@ -1,4 +1,5 @@
 ﻿using Chroma.Domain.Entities;
+using Chroma.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,21 +9,29 @@ public class PaletteConfigurations : IEntityTypeConfiguration<Palette>
 {
     public void Configure(EntityTypeBuilder<Palette> builder)
     {
-        builder.OwnsMany(palette => palette.Colors, color =>
-        {
-            color.ToTable("PaletteColors");
-            
-            // Explicit FK to owner
-            color.WithOwner().HasForeignKey("PaletteId");
+        builder.HasKey(p => p.PaletteId);
+        builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
 
-            // Add an Id for the dependent entries (or define a composite key)
-            color.Property<long>("PaletteColorId").ValueGeneratedOnAdd();
-            color.HasKey("PaletteColorId");
-            
-            color.Property(c => c.RedPigment).HasColumnName("R");
-            color.Property(c => c.GreenPigment).HasColumnName("G");
-            color.Property(c => c.BluePigment).HasColumnName("B");
-            color.Property(c => c.Opacity).HasColumnName("A");
+        builder.OwnsMany(palette => palette.Colors, colorBuilder =>
+        {
+            colorBuilder.ToTable("PaletteColors");
+
+            colorBuilder.Property<long>("PaletteColorId").ValueGeneratedOnAdd();
+            colorBuilder.HasKey("PaletteColorId");
+
+            colorBuilder.WithOwner().HasForeignKey(nameof(Palette.PaletteId));
+
+            colorBuilder.Property(c => c.RedPigment).HasColumnName("R");
+            colorBuilder.Property(c => c.GreenPigment).HasColumnName("G");
+            colorBuilder.Property(c => c.BluePigment).HasColumnName("B");
+            colorBuilder.Property(c => c.Opacity).HasColumnName("A").HasColumnType("decimal(18,2)");
+
+            colorBuilder.HasIndex(
+                nameof(Palette.PaletteId),
+                nameof(Color.RedPigment),
+                nameof(Color.GreenPigment),
+                nameof(Color.BluePigment),
+                nameof(Color.Opacity));
         });
     }
 }

@@ -4,13 +4,11 @@ public class Palette : IAggregateRoot
 {
     private const int MaxColors = 5;
 
-    // The list now holds the Value Object
     private readonly List<Color> _colors = [];
 
-    public long Id { get; private set; } // Entity ID
+    public long PaletteId { get; private set; }
     public string Name { get; set; }
 
-    // EF Core needs a parameterless constructor, which can be private
     private Palette()
     {
     }
@@ -30,7 +28,6 @@ public class Palette : IAggregateRoot
             throw new InvalidOperationException("Palette cannot contain more than 5 colors.");
         }
 
-        // The uniqueness check now relies on the Color VO's overridden Equals() method.
         if (_colors.Contains(newColor))
         {
             throw new InvalidOperationException("A color with the same RGB and Opacity already exists.");

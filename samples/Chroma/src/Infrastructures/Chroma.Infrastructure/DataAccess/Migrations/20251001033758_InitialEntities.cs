@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Chroma.Infrastructure.Migrations
+namespace Chroma.Infrastructure.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPaletteEntity : Migration
+    public partial class InitialEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,13 +14,13 @@ namespace Chroma.Infrastructure.Migrations
                 name: "Palettes",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    PaletteId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Palettes", x => x.Id);
+                    table.PrimaryKey("PK_Palettes", x => x.PaletteId);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,14 +42,14 @@ namespace Chroma.Infrastructure.Migrations
                         name: "FK_PaletteColors_Palettes_PaletteId",
                         column: x => x.PaletteId,
                         principalTable: "Palettes",
-                        principalColumn: "Id",
+                        principalColumn: "PaletteId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaletteColors_PaletteId",
+                name: "IX_PaletteColors_PaletteId_R_G_B_A",
                 table: "PaletteColors",
-                column: "PaletteId");
+                columns: new[] { "PaletteId", "R", "G", "B", "A" });
         }
 
         /// <inheritdoc />

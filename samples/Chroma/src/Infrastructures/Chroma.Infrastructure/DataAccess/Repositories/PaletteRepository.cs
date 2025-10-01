@@ -47,18 +47,18 @@ public class PaletteRepository : IPaletteRepository
 
         await connection.ExecuteAsync(
             "UPDATE Palettes SET Name = @Name WHERE Id = @Id",
-            new { palette.Name, palette.Id }, transaction);
+            new { palette.Name, Id = palette.PaletteId }, transaction);
 
         await connection.ExecuteAsync(
             "DELETE FROM PaletteColors WHERE PaletteId = @Id",
-            new { palette.Id }, transaction);
+            new { Id = palette.PaletteId }, transaction);
 
         foreach (var color in palette.Colors)
         {
             await connection.ExecuteAsync(
                 @"INSERT INTO PaletteColors (PaletteId, R, G, B, A) 
                       VALUES (@Id, @RedPigment, @GreenPigment, @BluePigment, @Opacity)",
-                new { palette.Id, color.RedPigment, color.GreenPigment, color.BluePigment, color.Opacity },
+                new { Id = palette.PaletteId, color.RedPigment, color.GreenPigment, color.BluePigment, color.Opacity },
                 transaction);
         }
 

@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Chroma.Infrastructure.Migrations
+namespace Chroma.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(ChromaDbContext))]
-    [Migration("20250930091451_AddPaletteEntity")]
-    partial class AddPaletteEntity
+    [Migration("20251001033758_InitialEntities")]
+    partial class InitialEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,16 +26,18 @@ namespace Chroma.Infrastructure.Migrations
 
             modelBuilder.Entity("Chroma.Domain.Entities.Palette", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("PaletteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PaletteId"));
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("PaletteId");
 
                     b.ToTable("Palettes");
                 });
@@ -71,7 +73,7 @@ namespace Chroma.Infrastructure.Migrations
 
                             b1.HasKey("PaletteColorId");
 
-                            b1.HasIndex("PaletteId");
+                            b1.HasIndex("PaletteId", "RedPigment", "GreenPigment", "BluePigment", "Opacity");
 
                             b1.ToTable("PaletteColors", (string)null);
 
