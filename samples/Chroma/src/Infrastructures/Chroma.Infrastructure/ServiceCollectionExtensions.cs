@@ -1,4 +1,11 @@
-﻿using Chroma.Application.Interfaces;
+﻿using Chroma.Application;
+using Chroma.Application.Commands;
+using Chroma.Application.Common;
+using Chroma.Application.DataObjects;
+using Chroma.Application.Handlers;
+using Chroma.Application.Handlers.Abstractions;
+using Chroma.Application.Interfaces;
+using Chroma.Application.Queries;
 using Chroma.Domain.Repositories;
 using Chroma.Infrastructure.DataAccess;
 using Chroma.Infrastructure.DataAccess.Repositories;
@@ -24,6 +31,15 @@ public static class ServiceCollectionExtensions
 
         // Register Repositories (the Infrastructure implementations)
         services.AddScoped<IPaletteRepository, PaletteRepository>();
+        
+        // Register the Dispatcher
+        services.AddScoped<IDispatcher, Dispatcher>();
+        
+        // Register Query/Command Handlers
+        services.AddTransient<ICommandHandler<AddColorToPaletteCommand>, AddColorToPaletteHandler>();
+        services.AddTransient<ICommandHandler<AddPaletteCommand>, AddPaletteCommandHandler>();
+        services.AddTransient<IQueryHandler<GetAllPalettesQuery, PagedList<PaletteDto>>, GetAllPalettesQueryHandler>();
+        services.AddTransient<IQueryHandler<GetPaletteByIdQuery, PaletteDto>, GetPaletteByIdQueryHandler>();
     }
 
     private static void AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)

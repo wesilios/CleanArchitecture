@@ -11,10 +11,7 @@ public static class ConfigurationBuilderExtensions
     {
         var configuration = configurationBuilder.Build();
         bool enabled = bool.Parse(configuration["Azure:KeyVault:Enabled"] ?? "false");
-        if (!enabled)
-        {
-            return;
-        }
+        if (!enabled) return;
 
         var tenantId = configuration["Azure:TenantId"];
         var clientId = configuration["Azure:ClientId"];

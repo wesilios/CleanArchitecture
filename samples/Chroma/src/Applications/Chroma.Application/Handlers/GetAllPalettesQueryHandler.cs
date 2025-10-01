@@ -1,6 +1,6 @@
 ﻿namespace Chroma.Application.Handlers;
 
-public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, List<PaletteDto>>
+public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, PagedList<PaletteDto>>
 {
     private readonly IPaletteQueryService _queryService;
 
@@ -9,7 +9,7 @@ public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, Lis
         _queryService = queryService;
     }
 
-    public Task<List<PaletteDto>> HandleAsync(GetAllPalettesQuery query)
+    public Task<PagedList<PaletteDto>> HandleAsync(GetAllPalettesQuery query)
     {
         throw new NotImplementedException();
     }
