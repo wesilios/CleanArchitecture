@@ -3,7 +3,7 @@
 namespace Chroma.Presentation.Api.Controllers;
 
 [Route("[controller]")]
-public class HealthCheckController : ControllerBase
+public class HealthCheckController : ApiBaseController
 {
     [HttpGet]
     public IActionResult Get()

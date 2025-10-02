@@ -10,7 +10,7 @@ public class PagedList<TResult> : IPagedList<TResult>
     public int ItemsPerPage { get; set; }
     public IEnumerator<TResult> GetEnumerator()
     {
-        throw new NotImplementedException();
+        return Results.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
