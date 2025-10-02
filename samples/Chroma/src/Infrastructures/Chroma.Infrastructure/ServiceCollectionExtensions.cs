@@ -7,9 +7,6 @@ using Chroma.Application.Handlers.Abstractions;
 using Chroma.Application.Interfaces;
 using Chroma.Application.Queries;
 using Chroma.Domain.Repositories;
-using Chroma.Infrastructure.DataAccess;
-using Chroma.Infrastructure.DataAccess.Repositories;
-using Chroma.Infrastructure.DataAccess.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,8 +35,8 @@ public static class ServiceCollectionExtensions
         // Register Query/Command Handlers
         services.AddTransient<ICommandHandler<AddColorToPaletteCommand>, AddColorToPaletteHandler>();
         services.AddTransient<ICommandHandler<AddPaletteCommand>, AddPaletteCommandHandler>();
-        services.AddTransient<IQueryHandler<GetAllPalettesQuery, PagedList<PaletteDto>>, GetAllPalettesQueryHandler>();
-        services.AddTransient<IQueryHandler<GetPaletteByIdQuery, PaletteDto>, GetPaletteByIdQueryHandler>();
+        services.AddTransient<IQueryHandler<GetAllPalettesQuery, IPagedList<IPaletteDto>>, GetAllPalettesQueryHandler>();
+        services.AddTransient<IQueryHandler<GetPaletteByIdQuery, IPaletteDto>, GetPaletteByIdQueryHandler>();
     }
 
     private static void AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)

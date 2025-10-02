@@ -1,9 +1,19 @@
-﻿namespace Chroma.Application.Handlers;
+﻿using Chroma.Domain.Entities;
+using Chroma.Domain.Repositories;
+
+namespace Chroma.Application.Handlers;
 
 public class AddPaletteCommandHandler : ICommandHandler<AddPaletteCommand>
 {
-    public Task HandleAsync(AddPaletteCommand command)
+    private readonly IPaletteRepository _repository;
+
+    public AddPaletteCommandHandler(IPaletteRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+
+    public async Task HandleAsync(AddPaletteCommand command)
+    {
+        await _repository.AddAsync(new Palette(command.Name));
     }
 }

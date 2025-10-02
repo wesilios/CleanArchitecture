@@ -23,7 +23,7 @@ public class AddColorToPaletteHandler : ICommandHandler<AddColorToPaletteCommand
             throw new KeyNotFoundException($"Palette with Id {command.PaletteId} not found.");
         }
 
-        var newColor = new Color(command.Red, command.Green, command.Blue, command.Opacity);
+        var newColor = new Color(command.R, command.G, command.B, command.A);
 
         palette.AddColor(newColor);
 
