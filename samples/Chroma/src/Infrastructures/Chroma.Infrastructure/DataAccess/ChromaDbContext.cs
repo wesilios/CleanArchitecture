@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using Chroma.Application.Interfaces;
 using Chroma.Domain.Entities;
-using Chroma.Infrastructure.DataAccess.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

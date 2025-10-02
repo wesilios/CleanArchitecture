@@ -1,10 +1,10 @@
-﻿namespace Chroma.Application.Commands;
+﻿namespace Chroma.Presentation.Api.Responses;
 
-public class AddColorToPaletteCommand : ICommand
+public class ColorResponse
 {
-    public long PaletteId { get; set; }
     public int R { get; set; }
     public int G { get; set; }
     public int B { get; set; }
     public decimal A { get; set; }
+    public string Hex { get; set; }
 }

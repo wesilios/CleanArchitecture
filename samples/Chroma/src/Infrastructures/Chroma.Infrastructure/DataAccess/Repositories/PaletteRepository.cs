@@ -1,47 +1,55 @@
 ﻿using Chroma.Domain.Entities;
 using Chroma.Domain.Repositories;
-using Dapper;
 
 namespace Chroma.Infrastructure.DataAccess.Repositories;
 
 public class PaletteRepository : IPaletteRepository
 {
     private readonly IChromaConnectionFactory _factory;
+    private readonly ChromaDbContext _dbContext;
 
-    public PaletteRepository(IChromaConnectionFactory factory)
+    public PaletteRepository(IChromaConnectionFactory factory, ChromaDbContext dbContext)
     {
         _factory = factory;
+        _dbContext = dbContext;
     }
 
     public async Task UpdateAsync(Palette palette)
     {
         await using var connection = _factory.CreateConnection();
+        await connection.OpenAsync();
+
         await using var transaction = connection.BeginTransaction();
 
         await connection.ExecuteAsync(
-            "UPDATE Palettes SET Name = @Name WHERE Id = @Id",
-            new { palette.Name, Id = palette.PaletteId }, transaction);
+            "UPDATE Palettes SET Name = @Name WHERE PaletteId = @PaletteId",
+            new { palette.Name, palette.PaletteId }, transaction);
 
         await connection.ExecuteAsync(
-            "DELETE FROM PaletteColors WHERE PaletteId = @Id",
-            new { Id = palette.PaletteId }, transaction);
+            "DELETE FROM PaletteColors WHERE PaletteId = @PaletteId",
+            new { palette.PaletteId }, transaction);
 
         foreach (var color in palette.Colors)
         {
             await connection.ExecuteAsync(
                 @"INSERT INTO PaletteColors (PaletteId, R, G, B, A) 
-                      VALUES (@Id, @RedPigment, @GreenPigment, @BluePigment, @Opacity)",
-                new { Id = palette.PaletteId, color.RedPigment, color.GreenPigment, color.BluePigment, color.Opacity },
+                      VALUES (@PaletteId, @R, @G, @B, @A)",
+                new {
+                    palette.PaletteId,
+                    color.R,
+                    color.G,
+                    color.B,
+                    color.A },
                 transaction);
         }
 
-        transaction.Commit();
+        await transaction.CommitAsync();
     }
 
-    public Task AddAsync(Palette palette)
+    public async Task AddAsync(Palette palette)
     {
-        /* ... Dapper Insert logic ... */
-        return Task.CompletedTask;
+        await _dbContext.Palettes.AddAsync(palette);
+        await _dbContext.SaveChangesAsync();
     }
 
     public Task SaveChangesAsync()

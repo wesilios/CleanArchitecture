@@ -1,6 +1,6 @@
 ﻿namespace Chroma.Application.Handlers;
 
-public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, PagedList<PaletteDto>>
+public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, IPagedList<IPaletteDto>>
 {
     private readonly IPaletteQueryService _queryService;
 
@@ -9,7 +9,7 @@ public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, Pag
         _queryService = queryService;
     }
 
-    public async Task<PagedList<PaletteDto>> HandleAsync(GetAllPalettesQuery query)
+    public async Task<IPagedList<IPaletteDto>> HandleAsync(GetAllPalettesQuery query)
     {
         var palettesPagedList = await _queryService.GetGetAllPalettesAsync(query);
 
@@ -21,10 +21,11 @@ public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesQuery, Pag
                 Name = p.Name,
                 Colors = p.Colors.Select(c => new ColorDto
                 {
-                    R = c.RedPigment,
-                    G = c.GreenPigment,
-                    B = c.BluePigment,
-                    A = c.Opacity
+                    R = c.R,
+                    G = c.G,
+                    B = c.B,
+                    A = c.A,
+                    Hex = c.ToHexString()
                 }).ToList()
             }).ToList(),
             TotalCount = palettesPagedList.TotalCount,

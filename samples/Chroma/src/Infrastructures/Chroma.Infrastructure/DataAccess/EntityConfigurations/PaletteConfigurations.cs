@@ -21,17 +21,17 @@ public class PaletteConfigurations : IEntityTypeConfiguration<Palette>
 
             colorBuilder.WithOwner().HasForeignKey(nameof(Palette.PaletteId));
 
-            colorBuilder.Property(c => c.RedPigment).HasColumnName("R");
-            colorBuilder.Property(c => c.GreenPigment).HasColumnName("G");
-            colorBuilder.Property(c => c.BluePigment).HasColumnName("B");
-            colorBuilder.Property(c => c.Opacity).HasColumnName("A").HasColumnType("decimal(18,2)");
+            colorBuilder.Property(c => c.R).HasColumnName("R");
+            colorBuilder.Property(c => c.G).HasColumnName("G");
+            colorBuilder.Property(c => c.B).HasColumnName("B");
+            colorBuilder.Property(c => c.A).HasColumnName("A").HasColumnType("decimal(18,2)");
 
             colorBuilder.HasIndex(
                 nameof(Palette.PaletteId),
-                nameof(Color.RedPigment),
-                nameof(Color.GreenPigment),
-                nameof(Color.BluePigment),
-                nameof(Color.Opacity));
+                nameof(Color.R),
+                nameof(Color.G),
+                nameof(Color.B),
+                nameof(Color.A));
         });
     }
 }

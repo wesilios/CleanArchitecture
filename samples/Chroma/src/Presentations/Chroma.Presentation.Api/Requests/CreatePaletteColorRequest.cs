@@ -1,8 +1,7 @@
-﻿namespace Chroma.Application.Commands;
+﻿namespace Chroma.Presentation.Api.Requests;
 
-public class AddColorToPaletteCommand : ICommand
+public class CreatePaletteColorRequest
 {
-    public long PaletteId { get; set; }
     public int R { get; set; }
     public int G { get; set; }
     public int B { get; set; }

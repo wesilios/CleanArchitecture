@@ -2,6 +2,7 @@
 using Chroma.Application.Interfaces;
 using Chroma.Application.Queries;
 using Chroma.Domain.Entities;
+using Chroma.Domain.ValueObjects;
 
 namespace Chroma.Infrastructure.DataAccess.Services;
 
@@ -14,31 +15,32 @@ public class PaletteQueryService : IPaletteQueryService
         _factory = factory;
     }
 
-    public async Task<Palette> GetByIdAsync(long paletteId)
+    public async Task<Palette?> GetByIdAsync(long paletteId)
     {
         await using var connection = _factory.CreateConnection();
 
         // This SQL fetches the Palette and all its Colors efficiently
         const string sql = @"
-                SELECT p.Id, p.Name, 
-                       c.R AS RedPigment, c.G AS GreenPigment, c.B AS BluePigment, c.A AS Opacity
+                SELECT p.PaletteId, p.Name, c.R, c.G, c.B, c.A
                 FROM Palettes p
-                LEFT JOIN PaletteColors c ON p.Id = c.PaletteId
-                WHERE p.Id = @PaletteId";
+                LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId
+                WHERE p.PaletteId = @PaletteId";
 
-        // Use Dapper's QueryMultiple or Query to reconstruct the aggregate root
-        // Note: Reconstructing the complex object from flat rows is complex with Dapper.
-        // For a complex write model, many teams keep EF Core for the Repository pattern 
-        // and ONLY use Dapper for the read side. For simplicity, we assume
-        // reconstruction logic here (often using Dapper's mapping features).
+        Palette? palette = null;
 
-        // ... (Actual reconstruction logic is verbose and omitted for brevity)
-        // ... (For a real implementation, you'd load Palette and Colors separately or use 
-        //      Dapper's 'splitOn' feature, and then manually reconstruct the Palette object 
-        //      to ensure domain rules are maintained).
+        await connection.QueryAsync<Palette?, Color?, Palette?>(sql, (p, c) =>
+        {
+            palette ??= p;
 
-        // Placeholder return:
-        return new Palette("Test Palette");
+            if (c != null)
+            {
+                palette?.AddColor(c);
+            }
+
+            return palette;
+        }, new { PaletteId = paletteId }, splitOn: "R");
+
+        return palette;
     }
 
     public Task<PagedList<Palette>> GetGetAllPalettesAsync(GetAllPalettesQuery query)
