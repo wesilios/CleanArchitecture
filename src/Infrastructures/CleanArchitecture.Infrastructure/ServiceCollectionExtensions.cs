@@ -2,8 +2,6 @@
 using CleanArchitecture.Application.Commands;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.DataObjects;
-using CleanArchitecture.Application.Handlers;
-using CleanArchitecture.Application.Handlers.Abstractions;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Application.Queries;
 using CleanArchitecture.Domain.Repositories;
@@ -33,9 +31,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDispatcher, Dispatcher>();
         
         // Register Query/Command Handlers
-        services.AddTransient<ICommandHandler<AddColorToPaletteCommand>, AddColorToPaletteHandler>();
-        services.AddTransient<ICommandHandler<AddPaletteCommand>, AddPaletteCommandHandler>();
-        services.AddTransient<IQueryHandler<GetAllPalettesQuery, IPagedList<IPaletteDto>>, GetAllPalettesQueryHandler>();
+        services.AddTransient<ICommandHandler<CreateColorToPaletteCommand>, CreateColorToPaletteHandler>();
+        services.AddTransient<ICommandHandler<CreatePaletteCommand>, CreatePaletteCommandHandler>();
+        services.AddTransient<ICommandHandler<UpdatePaletteCommand>, UpdatePaletteCommandHandler>();
+        services.AddTransient<ICommandHandler<DeletePaletteCommand>, DeletePaletteCommandHandler>();
+        services.AddTransient<IQueryHandler<GetAllPalettesSearchQuery, IPagedList<IPaletteDto>>, GetAllPalettesQueryHandler>();
         services.AddTransient<IQueryHandler<GetPaletteByIdQuery, IPaletteDto>, GetPaletteByIdQueryHandler>();
     }
 

@@ -36,6 +36,8 @@ public class Color : ValueObject
     public static Color Grey => new(153, 153, 153);
     public static Color Transparent => new(MinColorValue, MinColorValue, MinColorValue, MinOpacityValue);
 
+    public Color(){}
+    
     public Color(int red, int green, int blue, decimal opacity = MaxOpacityValue)
     {
         // Validation is done inside the constructor

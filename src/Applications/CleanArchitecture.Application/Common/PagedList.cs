@@ -7,7 +7,11 @@ public class PagedList<TResult> : IPagedList<TResult>
     public List<TResult> Results { get; set; } = new();
     public int TotalCount { get; set; }
     public int PageNumber { get; set; }
-    public int ItemsPerPage { get; set; }
+    public int PageSize { get; set; }
+    public int ItemsPerPage => Results.Count;
+
+    IReadOnlyList<TResult> IPagedList<TResult>.Results => Results.AsReadOnly();
+
     public IEnumerator<TResult> GetEnumerator()
     {
         return Results.GetEnumerator();
@@ -21,7 +25,9 @@ public class PagedList<TResult> : IPagedList<TResult>
 
 public interface IPagedList<out TResult> : IEnumerable<TResult>
 {
+    IReadOnlyList<TResult> Results { get; }
     int TotalCount { get; set; }
     int PageNumber { get; set; }
-    int ItemsPerPage { get; set; }
+    int PageSize { get; set; }
+    int ItemsPerPage { get; }
 }

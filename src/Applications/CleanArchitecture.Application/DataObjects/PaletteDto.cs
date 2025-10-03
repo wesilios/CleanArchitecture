@@ -19,7 +19,7 @@ public class PaletteDto : IPaletteDto
 public class NullPaletteDto : IPaletteDto
 {
     public static readonly NullPaletteDto Instance = new NullPaletteDto();
-    
+
     public long PaletteId { get; set; } = 0;
     public string Name { get; set; } = string.Empty;
     public List<ColorDto> Colors { get; set; } = [];

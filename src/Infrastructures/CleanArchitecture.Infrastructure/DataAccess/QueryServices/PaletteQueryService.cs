@@ -43,8 +43,57 @@ public class PaletteQueryService : IPaletteQueryService
         return palette;
     }
 
-    public Task<PagedList<Palette>> GetGetAllPalettesAsync(GetAllPalettesQuery query)
+    public async Task<PagedList<Palette>> GetGetAllPalettesAsync(GetAllPalettesSearchQuery searchQuery)
     {
-        throw new NotImplementedException();
+        await using var connection = _factory.CreateConnection();
+
+        var parameters = new
+        {
+            SearchTerm = string.IsNullOrWhiteSpace(searchQuery.SearchTerm)
+                ? null
+                : $"%{searchQuery.SearchTerm}%",
+            Offset = searchQuery.PaginationParameters.OffSet,
+            PageSize = searchQuery.PaginationParameters.PageSize
+        };
+
+        var countSql = @"SELECT COUNT(DISTINCT p.PaletteId) FROM Palettes p 
+                       WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)";
+
+        var totalCount = await connection.QuerySingleAsync<int>(countSql, parameters);
+
+        var sql = @"
+                SELECT p.PaletteId, p.Name, c.R, c.G, c.B, c.A
+                FROM Palettes p
+                LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId 
+                WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)
+                ORDER BY p.PaletteId DESC
+                OFFSET @Offset ROWS
+                FETCH NEXT @PageSize ROWS ONLY";
+
+        var paletteDictionary = new Dictionary<long, Palette>();
+
+        await connection.QueryAsync<Palette?, Color?, Palette?>(sql, (palette, color) =>
+        {
+            if (!paletteDictionary.TryGetValue(palette.PaletteId, out var existingPalette))
+            {
+                existingPalette = palette;
+                paletteDictionary.Add(palette.PaletteId, existingPalette);
+            }
+
+            if (color != null)
+            {
+                existingPalette.AddColor(color);
+            }
+
+            return existingPalette;
+        }, parameters, splitOn: "R");
+
+        return new PagedList<Palette>
+        {
+            Results = paletteDictionary.Values.ToList(),
+            TotalCount = totalCount,
+            PageNumber = searchQuery.PaginationParameters.PageNumber,
+            PageSize = searchQuery.PaginationParameters.PageSize
+        };
     }
 }

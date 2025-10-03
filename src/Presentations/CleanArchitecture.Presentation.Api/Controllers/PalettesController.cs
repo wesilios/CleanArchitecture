@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Commands;
+using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.DataObjects;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Application.Queries;
@@ -19,13 +20,27 @@ public class PalettesController : ApiBaseController
     [HttpPost]
     public async Task<IActionResult> CreatePaletteAsync([FromBody] CreatePaletteRequest request)
     {
-        var command = new AddPaletteCommand { Name = request.Name };
+        var command = new CreatePaletteCommand { Name = request.Name };
         await _dispatcher.SendAsync(command);
-        return ReturnActionResult(ApiResult<object>.Created(default, "Created successfully."));
+        return ReturnActionResult(ApiResult<object>.Created(ApiMessages.Palette.Created));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPalettesAsync([FromQuery] PalettePaginationRequest request)
+    {
+        var query = new GetAllPalettesSearchQuery
+        {
+            PaginationParameters = new PaginationParameters
+                { PageNumber = request.PageNumber, PageSize = request.PageSize },
+            SearchTerm = request.SearchTerm
+        };
+        var palettesList = await _dispatcher.QueryAsync<GetAllPalettesSearchQuery, IPagedList<IPaletteDto>>(query);
+        var response = PalettePaginationResponse.MapToResponse(palettesList);
+        return ReturnActionResult(ApiResult<PalettePaginationResponse>.Ok(response, ApiMessages.Palette.AllRetrieved));
     }
 
     [HttpGet("{paletteId:long}")]
-    public async Task<IActionResult> Get(long paletteId)
+    public async Task<IActionResult> GetPaletteAsync(long paletteId)
     {
         var query = new GetPaletteByIdQuery { PaletteId = paletteId };
         var dto = await _dispatcher.QueryAsync<GetPaletteByIdQuery, IPaletteDto>(query);
@@ -33,36 +48,40 @@ public class PalettesController : ApiBaseController
         var response = MapToResponse(dto);
 
         if (response.Empty)
-            return ReturnActionResult(ApiResult<IPaletteResponse>.NotFound(response, dto.Note));
-        return ReturnActionResult(ApiResult<IPaletteDto>.Ok(dto, "Get successfully."));
+            return ReturnActionResult(ApiResult.NotFound(ApiMessages.Palette.NotFound));
+        return ReturnActionResult(ApiResult<IPaletteResponse>.Ok(response, ApiMessages.Palette.Retrieved));
+    }
+
+    [HttpPut("{paletteId:long}")]
+    public async Task<IActionResult> UpdatePaletteAsync(long paletteId, [FromBody] UpdatePaletteRequest request)
+    {
+        var command = new UpdatePaletteCommand { PaletteId = paletteId, Name = request.Name };
+        await _dispatcher.SendAsync(command);
+        return ReturnActionResult(ApiResult.Ok());
+    }
+    
+    [HttpDelete("{paletteId:long}")]
+    public async Task<IActionResult> DeletePaletteAsync(long paletteId)
+    {
+        var command = new DeletePaletteCommand { PaletteId = paletteId };
+        await _dispatcher.SendAsync(command);
+        return ReturnActionResult(ApiResult.Ok());
     }
 
     [HttpPost("{paletteId:long}/colors")]
     public async Task<IActionResult> CreatePaletteColorAsync(long paletteId,
         [FromBody] CreatePaletteColorRequest request)
     {
-        var command = new AddColorToPaletteCommand
+        var command = new CreateColorToPaletteCommand
             { PaletteId = paletteId, R = request.R, G = request.G, B = request.B, A = request.A };
         await _dispatcher.SendAsync(command);
-        return ReturnActionResult(ApiResult<object>.Created(default, "Created successfully."));
+        return ReturnActionResult(ApiResult<object>.Created(ApiMessages.Palette.ColorAdded));
     }
 
     private static IPaletteResponse MapToResponse(IPaletteDto dto)
     {
         if (dto.Empty) return NullPaletteResponse.Instance;
 
-        return new PaletteResponse
-        {
-            PaletteId = dto.PaletteId,
-            Name = dto.Name,
-            Colors = dto.Colors.Select(c => new ColorResponse
-            {
-                R = c.R,
-                G = c.G,
-                B = c.B,
-                A = c.A,
-                Hex = c.Hex
-            }).ToList()
-        };
+        return PaletteResponse.CreateInstance(dto);
     }
 }

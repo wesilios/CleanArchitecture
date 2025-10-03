@@ -5,7 +5,7 @@ namespace CleanArchitecture.Presentation.Api.Controllers;
 
 public abstract class ApiBaseController : ControllerBase
 {
-    protected IActionResult ReturnActionResult<TData>(ApiResult<TData> response)
+    protected IActionResult ReturnActionResult(IApiResult response)
     {
         return response.StatusCode switch
         {

@@ -14,16 +14,18 @@ public class PaletteRepository : IPaletteRepository
         _dbContext = dbContext;
     }
 
-    public async Task UpdateAsync(Palette palette)
+    public async Task AddAsync(Palette palette)
+    {
+        await _dbContext.Palettes.AddAsync(palette);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task AddColorAsync(Palette palette)
     {
         await using var connection = _factory.CreateConnection();
         await connection.OpenAsync();
 
         await using var transaction = connection.BeginTransaction();
-
-        await connection.ExecuteAsync(
-            "UPDATE Palettes SET Name = @Name WHERE PaletteId = @PaletteId",
-            new { palette.Name, palette.PaletteId }, transaction);
 
         await connection.ExecuteAsync(
             "DELETE FROM PaletteColors WHERE PaletteId = @PaletteId",
@@ -34,27 +36,43 @@ public class PaletteRepository : IPaletteRepository
             await connection.ExecuteAsync(
                 @"INSERT INTO PaletteColors (PaletteId, R, G, B, A) 
                       VALUES (@PaletteId, @R, @G, @B, @A)",
-                new {
+                new
+                {
                     palette.PaletteId,
                     color.R,
                     color.G,
                     color.B,
-                    color.A },
+                    color.A
+                },
                 transaction);
         }
 
         await transaction.CommitAsync();
     }
 
-    public async Task AddAsync(Palette palette)
+    public async Task UpdateAsync(Palette palette)
     {
-        await _dbContext.Palettes.AddAsync(palette);
-        await _dbContext.SaveChangesAsync();
+        await using var connection = _factory.CreateConnection();
+
+        await connection.ExecuteAsync(
+            "UPDATE Palettes SET Name = @Name WHERE PaletteId = @PaletteId;",
+            new { palette.Name, palette.PaletteId });
     }
 
-    public Task SaveChangesAsync()
+    public async Task DeleteAsync(Palette palette)
     {
-        /* No-op or commit transaction if managed externally */
-        return Task.CompletedTask;
+        await using var connection = _factory.CreateConnection();
+
+        await connection.OpenAsync();
+
+        await using var transaction = connection.BeginTransaction();
+
+        await connection.ExecuteAsync(
+            @"
+                DELETE FROM PaletteColors WHERE PaletteId = @PaletteId;
+                DELETE FROM Palettes WHERE PaletteId = @PaletteId;",
+            new { palette.PaletteId }, transaction);
+
+        await transaction.CommitAsync();
     }
 }
