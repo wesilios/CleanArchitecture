@@ -18,10 +18,10 @@ public class ColorTests
         var color = new Color(red, green, blue);
 
         // Assert
-        color.RedPigment.Should().Be(red);
-        color.GreenPigment.Should().Be(green);
-        color.BluePigment.Should().Be(blue);
-        color.OpacityLevel.Should().Be(1); // Default opacity
+        color.R.Should().Be(red);
+        color.G.Should().Be(green);
+        color.B.Should().Be(blue);
+        color.A.Should().Be(1); // Default opacity
     }
 
     [Fact]
@@ -35,10 +35,10 @@ public class ColorTests
         var color = new Color(red, green, blue, opacity);
 
         // Assert
-        color.RedPigment.Should().Be(red);
-        color.GreenPigment.Should().Be(green);
-        color.BluePigment.Should().Be(blue);
-        color.OpacityLevel.Should().Be(opacity);
+        color.R.Should().Be(red);
+        color.G.Should().Be(green);
+        color.B.Should().Be(blue);
+        color.A.Should().Be(opacity);
     }
 
     [Theory]
@@ -89,10 +89,10 @@ public class ColorTests
         var color = new Color(hexValue);
 
         // Assert
-        color.RedPigment.Should().Be(expectedRed);
-        color.GreenPigment.Should().Be(expectedGreen);
-        color.BluePigment.Should().Be(expectedBlue);
-        color.OpacityLevel.Should().Be(expectedOpacity);
+        color.R.Should().Be(expectedRed);
+        color.G.Should().Be(expectedGreen);
+        color.B.Should().Be(expectedBlue);
+        color.A.Should().Be(expectedOpacity);
     }
 
     [Theory]
@@ -144,44 +144,44 @@ public class ColorTests
     public void StaticColors_ShouldHaveCorrectRgbValues()
     {
         // Assert White
-        Color.White.RedPigment.Should().Be(255);
-        Color.White.GreenPigment.Should().Be(255);
-        Color.White.BluePigment.Should().Be(255);
+        Color.White.R.Should().Be(255);
+        Color.White.G.Should().Be(255);
+        Color.White.B.Should().Be(255);
 
         // Assert Red
-        Color.Red.RedPigment.Should().Be(255);
-        Color.Red.GreenPigment.Should().Be(87);
-        Color.Red.BluePigment.Should().Be(51);
+        Color.Red.R.Should().Be(255);
+        Color.Red.G.Should().Be(87);
+        Color.Red.B.Should().Be(51);
 
         // Assert Orange
-        Color.Orange.RedPigment.Should().Be(255);
-        Color.Orange.GreenPigment.Should().Be(195);
-        Color.Orange.BluePigment.Should().Be(0);
+        Color.Orange.R.Should().Be(255);
+        Color.Orange.G.Should().Be(195);
+        Color.Orange.B.Should().Be(0);
 
         // Assert Yellow
-        Color.Yellow.RedPigment.Should().Be(255);
-        Color.Yellow.GreenPigment.Should().Be(255);
-        Color.Yellow.BluePigment.Should().Be(102);
+        Color.Yellow.R.Should().Be(255);
+        Color.Yellow.G.Should().Be(255);
+        Color.Yellow.B.Should().Be(102);
 
         // Assert Green
-        Color.Green.RedPigment.Should().Be(204);
-        Color.Green.GreenPigment.Should().Be(255);
-        Color.Green.BluePigment.Should().Be(153);
+        Color.Green.R.Should().Be(204);
+        Color.Green.G.Should().Be(255);
+        Color.Green.B.Should().Be(153);
 
         // Assert Blue
-        Color.Blue.RedPigment.Should().Be(102);
-        Color.Blue.GreenPigment.Should().Be(102);
-        Color.Blue.BluePigment.Should().Be(255);
+        Color.Blue.R.Should().Be(102);
+        Color.Blue.G.Should().Be(102);
+        Color.Blue.B.Should().Be(255);
 
         // Assert Purple
-        Color.Purple.RedPigment.Should().Be(153);
-        Color.Purple.GreenPigment.Should().Be(102);
-        Color.Purple.BluePigment.Should().Be(204);
+        Color.Purple.R.Should().Be(153);
+        Color.Purple.G.Should().Be(102);
+        Color.Purple.B.Should().Be(204);
 
         // Assert Grey
-        Color.Grey.RedPigment.Should().Be(153);
-        Color.Grey.GreenPigment.Should().Be(153);
-        Color.Grey.BluePigment.Should().Be(153);
+        Color.Grey.R.Should().Be(153);
+        Color.Grey.G.Should().Be(153);
+        Color.Grey.B.Should().Be(153);
     }
 
     [Fact]
@@ -375,9 +375,9 @@ public class ColorTests
         var color = new Color(red, green, blue);
 
         // Assert using Shouldly
-        color.RedPigment.ShouldBe(red);
-        color.GreenPigment.ShouldBe(green);
-        color.BluePigment.ShouldBe(blue);
+        color.R.ShouldBe(red);
+        color.G.ShouldBe(green);
+        color.B.ShouldBe(blue);
     }
 
     [Fact]
@@ -441,9 +441,9 @@ public class ColorTests
         var blended = red.BlendWith(blue, 0.5m);
 
         // Assert
-        blended.RedPigment.Should().Be(127);
-        blended.GreenPigment.Should().Be(0);
-        blended.BluePigment.Should().Be(127);
+        blended.R.Should().Be(127);
+        blended.G.Should().Be(0);
+        blended.B.Should().Be(127);
     }
 
     [Fact]
@@ -456,9 +456,9 @@ public class ColorTests
         var lightened = darkGray.Lighten(0.5m);
 
         // Assert
-        lightened.RedPigment.Should().BeGreaterThan(100);
-        lightened.GreenPigment.Should().BeGreaterThan(100);
-        lightened.BluePigment.Should().BeGreaterThan(100);
+        lightened.R.Should().BeGreaterThan(100);
+        lightened.G.Should().BeGreaterThan(100);
+        lightened.B.Should().BeGreaterThan(100);
     }
 
     [Fact]
@@ -471,9 +471,9 @@ public class ColorTests
         var darkened = lightGray.Darken(0.5m);
 
         // Assert
-        darkened.RedPigment.Should().BeLessThan(200);
-        darkened.GreenPigment.Should().BeLessThan(200);
-        darkened.BluePigment.Should().BeLessThan(200);
+        darkened.R.Should().BeLessThan(200);
+        darkened.G.Should().BeLessThan(200);
+        darkened.B.Should().BeLessThan(200);
     }
 
     [Fact]
@@ -486,10 +486,10 @@ public class ColorTests
         var semiTransparent = color.WithOpacity(0.50m);
 
         // Assert
-        semiTransparent.OpacityLevel.Should().Be(0.50m);
-        semiTransparent.RedPigment.Should().Be(color.RedPigment);
-        semiTransparent.GreenPigment.Should().Be(color.GreenPigment);
-        semiTransparent.BluePigment.Should().Be(color.BluePigment);
+        semiTransparent.A.Should().Be(0.50m);
+        semiTransparent.R.Should().Be(color.R);
+        semiTransparent.G.Should().Be(color.G);
+        semiTransparent.B.Should().Be(color.B);
     }
 
     [Fact]
