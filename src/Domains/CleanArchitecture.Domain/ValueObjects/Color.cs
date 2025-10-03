@@ -9,10 +9,10 @@ public class Color : ValueObject
     private const decimal MinOpacityValue = decimal.Zero;
     private const decimal MaxOpacityValue = decimal.One;
 
-    public int RedPigment { get; }
-    public int GreenPigment { get; }
-    public int BluePigment { get; }
-    public decimal OpacityLevel { get; }
+    public int R { get; }
+    public int G { get; }
+    public int B { get; }
+    public decimal A { get; }
 
     public static Color CreateFromHex(string hexCode)
     {
@@ -52,10 +52,10 @@ public class Color : ValueObject
                 $"Opacity value must be between {MinOpacityValue} and {MaxOpacityValue}.");
         }
 
-        RedPigment = red;
-        GreenPigment = green;
-        BluePigment = blue;
-        OpacityLevel = Math.Round(opacity, 2);
+        R = red;
+        G = green;
+        B = blue;
+        A = Math.Round(opacity, 2);
     }
 
     public Color(string hexValue)
@@ -82,10 +82,10 @@ public class Color : ValueObject
 
         try
         {
-            RedPigment = Convert.ToInt32(hexValue.Substring(0, 2), 16);
-            GreenPigment = Convert.ToInt32(hexValue.Substring(2, 2), 16);
-            BluePigment = Convert.ToInt32(hexValue.Substring(4, 2), 16);
-            OpacityLevel = hexValue.Length == 8
+            R = Convert.ToInt32(hexValue.Substring(0, 2), 16);
+            G = Convert.ToInt32(hexValue.Substring(2, 2), 16);
+            B = Convert.ToInt32(hexValue.Substring(4, 2), 16);
+            A = hexValue.Length == 8
                 ? Math.Round(Convert.ToInt32(hexValue.Substring(6, 2), 16) / 255m, 2)
                 : MaxOpacityValue;
         }
@@ -97,10 +97,10 @@ public class Color : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return RedPigment;
-        yield return GreenPigment;
-        yield return BluePigment;
-        yield return OpacityLevel;
+        yield return R;
+        yield return G;
+        yield return B;
+        yield return A;
     }
 
     public static explicit operator Color(string hexCode)
@@ -133,11 +133,11 @@ public class Color : ValueObject
     {
         if (includeOpacity)
         {
-            var opacityByte = (int)Math.Round(OpacityLevel * MaxColorValue);
-            return $"#{RedPigment:X2}{GreenPigment:X2}{BluePigment:X2}{opacityByte:X2}";
+            var opacityByte = (int)Math.Round(A * MaxColorValue);
+            return $"#{R:X2}{G:X2}{B:X2}{opacityByte:X2}";
         }
 
-        return $"#{RedPigment:X2}{GreenPigment:X2}{BluePigment:X2}";
+        return $"#{R:X2}{G:X2}{B:X2}";
     }
 
     public Color BlendWith(Color other, decimal ratio = 0.5m)
@@ -147,10 +147,10 @@ public class Color : ValueObject
             throw new ArgumentOutOfRangeException(nameof(ratio), "Blend ratio must be between 0.0 and 1.0");
         }
 
-        var blendedRed = (int)(RedPigment * (MaxOpacityValue - ratio) + other.RedPigment * ratio);
-        var blendedGreen = (int)(GreenPigment * (MaxOpacityValue - ratio) + other.GreenPigment * ratio);
-        var blendedBlue = (int)(BluePigment * (MaxOpacityValue - ratio) + other.BluePigment * ratio);
-        var blendedOpacity = OpacityLevel * (MaxOpacityValue - ratio) + other.OpacityLevel * ratio;
+        var blendedRed = (int)(R * (MaxOpacityValue - ratio) + other.R * ratio);
+        var blendedGreen = (int)(G * (MaxOpacityValue - ratio) + other.G * ratio);
+        var blendedBlue = (int)(B * (MaxOpacityValue - ratio) + other.B * ratio);
+        var blendedOpacity = A * (MaxOpacityValue - ratio) + other.A * ratio;
 
         return new Color(blendedRed, blendedGreen, blendedBlue, blendedOpacity);
     }
@@ -162,11 +162,11 @@ public class Color : ValueObject
             throw new ArgumentOutOfRangeException(nameof(factor), "Lightening factor must be between 0.0 and 1.0");
         }
 
-        var lightenedRed = Math.Min(MaxColorValue, (int)(RedPigment + (MaxColorValue - RedPigment) * factor));
-        var lightenedGreen = Math.Min(MaxColorValue, (int)(GreenPigment + (MaxColorValue - GreenPigment) * factor));
-        var lightenedBlue = Math.Min(MaxColorValue, (int)(BluePigment + (MaxColorValue - BluePigment) * factor));
+        var lightenedRed = Math.Min(MaxColorValue, (int)(R + (MaxColorValue - R) * factor));
+        var lightenedGreen = Math.Min(MaxColorValue, (int)(G + (MaxColorValue - G) * factor));
+        var lightenedBlue = Math.Min(MaxColorValue, (int)(B + (MaxColorValue - B) * factor));
 
-        return new Color(lightenedRed, lightenedGreen, lightenedBlue, OpacityLevel);
+        return new Color(lightenedRed, lightenedGreen, lightenedBlue, A);
     }
 
     public Color Darken(decimal factor = 0.2m)
@@ -176,19 +176,19 @@ public class Color : ValueObject
             throw new ArgumentOutOfRangeException(nameof(factor), "Darkening factor must be between 0.0 and 1.0");
         }
 
-        var darkenedRed = Math.Max(MinColorValue, (int)(RedPigment * (MaxOpacityValue - factor)));
-        var darkenedGreen = Math.Max(MinColorValue, (int)(GreenPigment * (MaxOpacityValue - factor)));
-        var darkenedBlue = Math.Max(MinColorValue, (int)(BluePigment * (MaxOpacityValue - factor)));
+        var darkenedRed = Math.Max(MinColorValue, (int)(R * (MaxOpacityValue - factor)));
+        var darkenedGreen = Math.Max(MinColorValue, (int)(G * (MaxOpacityValue - factor)));
+        var darkenedBlue = Math.Max(MinColorValue, (int)(B * (MaxOpacityValue - factor)));
 
-        return new Color(darkenedRed, darkenedGreen, darkenedBlue, OpacityLevel);
+        return new Color(darkenedRed, darkenedGreen, darkenedBlue, A);
     }
 
     public Color WithOpacity(decimal opacity)
     {
-        return new Color(RedPigment, GreenPigment, BluePigment, opacity);
+        return new Color(R, G, B, opacity);
     }
 
-    public bool IsTransparent => OpacityLevel == MinOpacityValue;
+    public bool IsTransparent => A == MinOpacityValue;
 
-    public bool IsOpaque => OpacityLevel == MaxOpacityValue;
+    public bool IsOpaque => A == MaxOpacityValue;
 }

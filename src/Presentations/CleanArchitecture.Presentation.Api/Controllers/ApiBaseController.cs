@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using CleanArchitecture.Presentation.Api.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Presentation.Api.Controllers;

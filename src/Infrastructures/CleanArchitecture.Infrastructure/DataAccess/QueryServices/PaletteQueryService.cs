@@ -1,16 +1,16 @@
-﻿using Chroma.Application.Common;
-using Chroma.Application.Interfaces;
-using Chroma.Application.Queries;
-using Chroma.Domain.Entities;
-using Chroma.Domain.ValueObjects;
+﻿using CleanArchitecture.Application.Common;
+using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Queries;
+using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Domain.ValueObjects;
 
-namespace Chroma.Infrastructure.DataAccess.Services;
+namespace CleanArchitecture.Infrastructure.DataAccess.QueryServices;
 
 public class PaletteQueryService : IPaletteQueryService
 {
-    private readonly IChromaConnectionFactory _factory;
+    private readonly ICleanArchitectureConnectionFactory _factory;
 
-    public PaletteQueryService(IChromaConnectionFactory factory)
+    public PaletteQueryService(ICleanArchitectureConnectionFactory factory)
     {
         _factory = factory;
     }

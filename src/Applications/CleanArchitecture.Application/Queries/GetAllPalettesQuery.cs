@@ -1,6 +1,6 @@
 ﻿namespace CleanArchitecture.Application.Queries;
 
-public class GetAllSampleQuery : PaginationParameters
+public class GetAllPalettesQuery : PaginationParameters, IQuery<IPagedList<IPaletteDto>>
 {
     public string? SearchTerm { get; set; }
 }
