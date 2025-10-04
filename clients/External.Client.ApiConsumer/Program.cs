@@ -34,7 +34,7 @@ try
     var host = builder.Build();
 
     // Use the new clean console application
-    var app = host.Services.GetRequiredService<CleanConsoleApplication>();
+    var app = host.Services.GetRequiredService<ConsoleApplication>();
     await app.RunAsync();
 }
 catch (Exception ex)

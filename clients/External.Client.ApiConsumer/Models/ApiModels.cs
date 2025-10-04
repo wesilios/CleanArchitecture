@@ -1,11 +1,44 @@
 namespace External.Client.ApiConsumer.Models;
 
 // API Response wrapper - matches ApiResult<T> from API
-public class ApiResponse<T>
+public class BaseApiResponse<T>
 {
     public T Data { get; set; } = default!;
     public string Message { get; set; } = string.Empty;
     public int StatusCode { get; set; }
+
+    /// <summary>
+    /// Ensures the API response was successful, throws exception if not
+    /// </summary>
+    /// <returns>The response data if successful</returns>
+    /// <exception cref="ApiResponseException">Thrown when the response indicates failure</exception>
+    public T EnsureSuccess()
+    {
+        if (StatusCode >= 200 && StatusCode < 300)
+        {
+            return Data;
+        }
+
+        throw new ApiResponseException(StatusCode, Message);
+    }
+}
+
+/// <summary>
+/// Exception thrown when API response indicates failure
+/// </summary>
+public class ApiResponseException : Exception
+{
+    public int StatusCode { get; }
+
+    public ApiResponseException(int statusCode, string message) : base(message)
+    {
+        StatusCode = statusCode;
+    }
+
+    public ApiResponseException(int statusCode, string message, Exception innerException) : base(message, innerException)
+    {
+        StatusCode = statusCode;
+    }
 }
 
 // Request models

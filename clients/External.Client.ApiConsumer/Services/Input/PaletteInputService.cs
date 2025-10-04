@@ -16,7 +16,7 @@ public class PaletteInputService : IPaletteInputService
     public void WaitForKeyPress()
     {
         AnsiConsole.MarkupLine("\n[dim]Press any key to continue...[/]");
-        System.Console.ReadKey(true);
+        Console.ReadKey(true);
     }
 
     public int GetPageNumber()

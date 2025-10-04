@@ -4,6 +4,9 @@ using External.Client.ApiConsumer.Services.Handlers;
 using External.Client.ApiConsumer.Services.Input;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Refit;
+using System.Text.Json;
+using External.Client.ApiConsumer.Services.HttpClients;
 
 namespace External.Client.ApiConsumer;
 
@@ -13,29 +16,40 @@ namespace External.Client.ApiConsumer;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers console services with HTTP client configuration
+    /// Registers console services with Refit API client configuration
     /// </summary>
-    public static IServiceCollection AddConsoleServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddConsoleServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Configure HttpClient for API communication
+        // Configure Refit API client
         var apiBaseUrl = configuration.GetValue<string>("ApiSettings:BaseUrl") ?? "https://localhost:7001";
 
-        services.AddHttpClient<IApiClient, ApiClient>(client =>
+        // Configure Refit settings
+        var refitSettings = new RefitSettings
         {
-            client.BaseAddress = new Uri(apiBaseUrl);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-        });
+            ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            })
+        };
+
+        // Register Refit API interface
+        services.AddRefitClient<IPaletteApiClient>(refitSettings)
+            .ConfigureHttpClient(client =>
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
 
         // Register API client services
+        services.AddScoped<IApiClientService, PaletteApiClientService>();
         services.AddScoped<IPaletteService, PaletteService>();
-
-        return services;
     }
 
     /// <summary>
     /// Registers all console application services with clean architecture separation
     /// </summary>
-    public static IServiceCollection AddCleanConsoleServices(this IServiceCollection services)
+    public static void AddCleanConsoleServices(this IServiceCollection services)
     {
         // Display Services
         services.AddScoped<WelcomeDisplayService>();
@@ -49,8 +63,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPaletteCommandHandler, PaletteCommandHandler>();
 
         // Main Application
-        services.AddScoped<CleanConsoleApplication>();
-
-        return services;
+        services.AddScoped<ConsoleApplication>();
     }
 }

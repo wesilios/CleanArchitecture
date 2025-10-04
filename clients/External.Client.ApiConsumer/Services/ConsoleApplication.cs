@@ -7,18 +7,18 @@ namespace External.Client.ApiConsumer.Services;
 /// <summary>
 /// Clean architecture console application with separated concerns
 /// </summary>
-public class CleanConsoleApplication
+public class ConsoleApplication
 {
     private readonly IMenuDisplayService _menuDisplayService;
     private readonly WelcomeDisplayService _welcomeDisplayService;
     private readonly IPaletteCommandHandler _paletteCommandHandler;
-    private readonly ILogger<CleanConsoleApplication> _logger;
+    private readonly ILogger<ConsoleApplication> _logger;
 
-    public CleanConsoleApplication(
+    public ConsoleApplication(
         IMenuDisplayService menuDisplayService,
         WelcomeDisplayService welcomeDisplayService,
         IPaletteCommandHandler paletteCommandHandler,
-        ILogger<CleanConsoleApplication> logger)
+        ILogger<ConsoleApplication> logger)
     {
         _menuDisplayService = menuDisplayService;
         _welcomeDisplayService = welcomeDisplayService;
@@ -46,15 +46,13 @@ public class CleanConsoleApplication
                         _welcomeDisplayService.DisplayMessage("Goodbye!");
                         break;
                     default:
-                        if (await _paletteCommandHandler.CanHandleAsync(choice))
-                        {
-                            await _paletteCommandHandler.ExecuteAsync(choice);
-                        }
-                        else
+                        if (!await _paletteCommandHandler.CanHandleAsync(choice))
                         {
                             _welcomeDisplayService.DisplayError($"Unknown option: {choice}");
+                            break;
                         }
 
+                        await _paletteCommandHandler.ExecuteAsync(choice);
                         break;
                 }
             }

@@ -80,15 +80,14 @@ public class PaletteCommandHandler : IPaletteCommandHandler
         var paletteName = _inputService.GetPaletteName();
         var success = await _paletteService.CreatePaletteAsync(paletteName);
 
-        if (success)
-        {
-            _displayService.DisplaySuccess("Palette created successfully!");
-        }
-        else
+        if (!success)
         {
             _displayService.DisplayError("Failed to create palette.");
+            _inputService.WaitForKeyPress();
+            return;
         }
 
+        _displayService.DisplaySuccess("Palette created successfully!");
         _inputService.WaitForKeyPress();
     }
 
@@ -99,15 +98,14 @@ public class PaletteCommandHandler : IPaletteCommandHandler
         var paletteId = _inputService.GetPaletteId();
         var palette = await _paletteService.GetPaletteByIdAsync(paletteId);
 
-        if (palette != null)
-        {
-            _displayService.DisplayPaletteDetails(palette);
-        }
-        else
+        if (palette == null)
         {
             _displayService.DisplayError("Palette not found.");
+            _inputService.WaitForKeyPress();
+            return;
         }
 
+        _displayService.DisplayPaletteDetails(palette);
         _inputService.WaitForKeyPress();
     }
 
@@ -119,15 +117,14 @@ public class PaletteCommandHandler : IPaletteCommandHandler
         var newName = _inputService.GetPaletteName();
         var success = await _paletteService.UpdatePaletteAsync(paletteId, newName);
 
-        if (success)
-        {
-            _displayService.DisplaySuccess("Palette updated successfully!");
-        }
-        else
+        if (!success)
         {
             _displayService.DisplayError("Failed to update palette.");
+            _inputService.WaitForKeyPress();
+            return;
         }
 
+        _displayService.DisplaySuccess("Palette updated successfully!");
         _inputService.WaitForKeyPress();
     }
 
@@ -147,15 +144,14 @@ public class PaletteCommandHandler : IPaletteCommandHandler
         }
 
         var success = await _paletteService.DeletePaletteAsync(paletteId);
-        if (success)
-        {
-            _displayService.DisplaySuccess("Palette deleted successfully!");
-        }
-        else
+        if (!success)
         {
             _displayService.DisplayError("Failed to delete palette.");
+            _inputService.WaitForKeyPress();
+            return;
         }
 
+        _displayService.DisplaySuccess("Palette deleted successfully!");
         _inputService.WaitForKeyPress();
     }
 

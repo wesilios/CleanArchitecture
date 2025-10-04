@@ -1,16 +1,17 @@
 using External.Client.ApiConsumer.Models;
+using External.Client.ApiConsumer.Services.HttpClients;
 using Microsoft.Extensions.Logging;
 
 namespace External.Client.ApiConsumer.Services;
 
 public class PaletteService : IPaletteService
 {
-    private readonly IApiClient _apiClient;
+    private readonly IApiClientService _apiClientService;
     private readonly ILogger<PaletteService> _logger;
 
-    public PaletteService(IApiClient apiClient, ILogger<PaletteService> logger)
+    public PaletteService(IApiClientService apiClientService, ILogger<PaletteService> logger)
     {
-        _apiClient = apiClient;
+        _apiClientService = apiClientService;
         _logger = logger;
     }
 
@@ -19,7 +20,7 @@ public class PaletteService : IPaletteService
     {
         try
         {
-            var response = await _apiClient.GetPalettesAsync(pageNumber, pageSize, searchTerm);
+            var response = await _apiClientService.GetPalettesAsync(pageNumber, pageSize, searchTerm);
             return response?.Data;
         }
         catch (Exception ex)
@@ -33,7 +34,7 @@ public class PaletteService : IPaletteService
     {
         try
         {
-            var response = await _apiClient.GetPaletteByIdAsync(paletteId);
+            var response = await _apiClientService.GetPaletteByIdAsync(paletteId);
             return response?.Data;
         }
         catch (Exception ex)
@@ -48,7 +49,7 @@ public class PaletteService : IPaletteService
         try
         {
             var request = new CreatePaletteRequest { Name = name };
-            var response = await _apiClient.CreatePaletteAsync(request);
+            var response = await _apiClientService.CreatePaletteAsync(request);
             return response != null;
         }
         catch (Exception ex)
@@ -63,7 +64,7 @@ public class PaletteService : IPaletteService
         try
         {
             var request = new UpdatePaletteRequest { Name = name };
-            var response = await _apiClient.UpdatePaletteAsync(paletteId, request);
+            var response = await _apiClientService.UpdatePaletteAsync(paletteId, request);
             return response != null;
         }
         catch (Exception ex)
@@ -77,7 +78,7 @@ public class PaletteService : IPaletteService
     {
         try
         {
-            var response = await _apiClient.DeletePaletteAsync(paletteId);
+            var response = await _apiClientService.DeletePaletteAsync(paletteId);
             return response != null;
         }
         catch (Exception ex)
@@ -92,7 +93,7 @@ public class PaletteService : IPaletteService
         try
         {
             var request = new CreatePaletteColorRequest { R = r, G = g, B = b, A = a };
-            var response = await _apiClient.AddColorToPaletteAsync(paletteId, request);
+            var response = await _apiClientService.AddColorToPaletteAsync(paletteId, request);
             return response != null;
         }
         catch (Exception ex)
