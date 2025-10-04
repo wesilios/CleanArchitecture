@@ -11,6 +11,10 @@ public class PaletteConfigurations : IEntityTypeConfiguration<Palette>
     {
         builder.HasKey(p => p.PaletteId);
         builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
+        builder.Property(p => p.CreatedTime)
+            .HasColumnType("datetime2")
+            .HasDefaultValueSql("GETUTCDATE()")
+            .ValueGeneratedOnAdd();
 
         builder.OwnsMany(palette => palette.Colors, colorBuilder =>
         {

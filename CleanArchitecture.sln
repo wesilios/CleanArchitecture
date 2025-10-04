@@ -34,6 +34,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Presentation.Web", "src\Presentations\CleanArchitecture.Presentation.Web\CleanArchitecture.Presentation.Web.csproj", "{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6}"
 EndProject
 #endif
+#if (useConsoleApp)
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Presentation.Console", "src\Presentations\CleanArchitecture.Presentation.Console\CleanArchitecture.Presentation.Console.csproj", "{7AB3C0E2-B76F-4A27-81E4-C7AAE8526B68}"
+EndProject
+#endif
+#if(withExternalClientApp)
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "clients", "clients", "{C4AC2C80-EC93-4C62-8064-F60FBE7DC830}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "External.Client.ApiConsumer", "clients\External.Client.ApiConsumer\External.Client.ApiConsumer.csproj", "{41B07283-D75C-45E9-AD7A-31281FC96E64}"
+EndProject
+#endif
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +67,12 @@ Global
 #endif
 #if (useRazorPages)
 		{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6} = {1C6981F8-0F5C-414C-9258-1D57EB2ED162}
+#endif
+#if (useConsoleApp)
+		{7AB3C0E2-B76F-4A27-81E4-C7AAE8526B68} = {1C6981F8-0F5C-414C-9258-1D57EB2ED162}
+#endif
+#if (withExternalClientApp)
+		{41B07283-D75C-45E9-AD7A-31281FC96E64} = {C4AC2C80-EC93-4C62-8064-F60FBE7DC830}
 #endif
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -97,6 +113,18 @@ Global
 		{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6D2C0B5-BBDF-4770-B8E9-49977783B3A6}.Release|Any CPU.Build.0 = Release|Any CPU
+#endif
+#if (useConsoleApp)
+		{7AB3C0E2-B76F-4A27-81E4-C7AAE8526B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB3C0E2-B76F-4A27-81E4-C7AAE8526B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB3C0E2-B76F-4A27-81E4-C7AAE8526B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB3C0E2-B76F-4A27-81E4-C7AAE8526B68}.Release|Any CPU.Build.0 = Release|Any CPU
+#endif
+#if (withExternalClientApp)
+		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Release|Any CPU.Build.0 = Release|Any CPU
 #endif
 	EndGlobalSection
 EndGlobal

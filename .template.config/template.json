@@ -96,19 +96,31 @@
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "true",
-      "description": "Whether to include Web API."
+      "description": "Whether to include Presentation Layer Web API."
     },
     "useGrpc": {
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "false",
-      "description": "Whether to include gRPC."
+      "description": "Whether to include Presentation Layer gRPC."
     },
     "useRazorPages": {
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "false",
-      "description": "Whether to include Razor Pages."
+      "description": "Whether to include Presentation Layer Razor Pages."
+    },
+    "useConsoleApp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include Presentation Layer Console App."
+    },
+    "withExternalClientApp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include an external client app."
     }
   },
   "sources": [
@@ -162,6 +174,18 @@
           "condition": "(!useRazorPages)",
           "exclude": [
             "src/Presentations/CleanArchitecture.Presentation.Web/**"
+          ]
+        },
+        {
+          "condition": "(!useConsoleApp)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Presentation.Console/**"
+          ]
+        },
+        {
+          "condition": "(!withExternalClientApp)",
+          "exclude": [
+            "clients/**"
           ]
         },
         {

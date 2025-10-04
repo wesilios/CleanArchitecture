@@ -8,6 +8,7 @@ public class Palette : IAggregateRoot
 
     public long PaletteId { get; private set; }
     public string Name { get; set; }
+    public DateTime CreatedTime { get; set; }
 
     private Palette()
     {

@@ -10,10 +10,6 @@
         <PackageReference Include="Dapper" Version="2.1.66" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.20" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.20" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.20">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.20"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.20"/>
         <!--#if (useSqlite)-->
@@ -36,6 +32,10 @@
         <!--#if (useAzure)-->
         <ProjectReference Include="..\CleanArchitecture.Infrastructure.Azure\CleanArchitecture.Infrastructure.Azure.csproj" />
         <!--#endif-->
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DataAccess\Migrations\" />
     </ItemGroup>
 
 </Project>
