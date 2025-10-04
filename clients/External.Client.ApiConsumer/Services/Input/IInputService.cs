@@ -1,3 +1,5 @@
+using External.Client.ApiConsumer.Models;
+
 namespace External.Client.ApiConsumer.Services.Input;
 
 /// <summary>
@@ -19,5 +21,5 @@ public interface IPaletteInputService : IInputService
     string? GetSearchTerm();
     string GetPaletteName();
     long GetPaletteId();
-    ColorData? GetColorData();
+    CreatePaletteColorRequest? GetColorData();
 }

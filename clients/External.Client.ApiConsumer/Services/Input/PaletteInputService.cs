@@ -1,3 +1,4 @@
+using External.Client.ApiConsumer.Models;
 using Spectre.Console;
 
 namespace External.Client.ApiConsumer.Services.Input;
@@ -63,7 +64,7 @@ public class PaletteInputService : IPaletteInputService
                 .Validate(id => id > 0 ? ValidationResult.Success() : ValidationResult.Error()));
     }
 
-    public ColorData? GetColorData()
+    public CreatePaletteColorRequest? GetColorData()
     {
         AnsiConsole.Write(new Rule("[bold yellow]COLOR INPUT WIZARD[/]")
         {
@@ -148,7 +149,7 @@ public class PaletteInputService : IPaletteInputService
 
             AnsiConsole.Write(previewPanel);
 
-            return new ColorData { R = r, G = g, B = b, A = a };
+            return new CreatePaletteColorRequest { R = r, G = g, B = b, A = a };
         }
         catch (Exception)
         {
