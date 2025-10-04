@@ -21,14 +21,20 @@ builder.ConfigureAppConfiguration((context, config) =>
     config.AddCommandLine(args);
 });
 
-builder.ConfigureServices((context, services) => { services.AddConsoleServices(context.Configuration); });
+builder.ConfigureServices((context, services) =>
+{
+    services.AddConsoleServices(context.Configuration);
+    services.AddCleanConsoleServices();
+});
 
 try
 {
-    Log.Information("Starting CleanArchitecture Console Application");
+    Log.Information("Starting CleanArchitecture Console Application with Clean Architecture");
 
     var host = builder.Build();
-    var app = host.Services.GetRequiredService<ConsoleApplication>();
+
+    // Use the new clean console application
+    var app = host.Services.GetRequiredService<CleanConsoleApplication>();
     await app.RunAsync();
 }
 catch (Exception ex)

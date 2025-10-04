@@ -22,6 +22,7 @@ public class GetPaletteByIdQueryHandler : IQueryHandler<GetPaletteByIdQuery, IPa
         {
             PaletteId = palette.PaletteId,
             Name = palette.Name,
+            CreatedTime = palette.CreatedTime,
             Colors = palette.Colors.Select(c => new ColorDto
             {
                 R = c.R,

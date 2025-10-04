@@ -1,6 +1,6 @@
 namespace External.Client.ApiConsumer.Models;
 
-// API Response wrapper
+// API Response wrapper - matches ApiResult<T> from API
 public class ApiResponse<T>
 {
     public T Data { get; set; } = default!;
@@ -27,10 +27,10 @@ public class CreatePaletteColorRequest
     public decimal A { get; set; } = 1.0m;
 }
 
-// Response models
+// Response models - matches API structure
 public class PalettePaginationResponse
 {
-    public IEnumerable<PaletteResponse> Results { get; set; } = new List<PaletteResponse>();
+    public List<PaletteResponse> Results { get; set; } = [];
     public int PageNumber { get; set; }
     public int ItemsPerPage { get; set; }
     public int TotalCount { get; set; }
@@ -50,7 +50,7 @@ public class PaletteResponse
     public long PaletteId { get; set; }
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedTime { get; set; }
-    public IEnumerable<ColorResponse> Colors { get; set; } = new List<ColorResponse>();
+    public List<ColorResponse> Colors { get; set; } = [];
 }
 
 public class ColorResponse

@@ -18,7 +18,7 @@ public class ApiClient : IApiClient
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = null
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
     }
 
@@ -40,7 +40,35 @@ public class ApiClient : IApiClient
 
             if (response.IsSuccessStatusCode)
             {
-                return JsonSerializer.Deserialize<ApiResponse<PalettePaginationResponse>>(content, _jsonOptions);
+                _logger.LogDebug("API Response Content: {Content}", content);
+
+                // Try to deserialize as the expected structure first
+                try
+                {
+                    return JsonSerializer.Deserialize<ApiResponse<PalettePaginationResponse>>(content, _jsonOptions);
+                }
+                catch (JsonException)
+                {
+                    // If that fails, try to deserialize as array directly (fallback for current API structure)
+                    _logger.LogWarning("Failed to deserialize as PalettePaginationResponse, trying array fallback");
+                    var arrayResponse =
+                        JsonSerializer.Deserialize<ApiResponse<List<PaletteResponse>>>(content, _jsonOptions);
+                    if (arrayResponse?.Data != null)
+                    {
+                        return new ApiResponse<PalettePaginationResponse>
+                        {
+                            Data = new PalettePaginationResponse
+                            {
+                                Results = arrayResponse.Data,
+                                PageNumber = pageNumber,
+                                ItemsPerPage = pageSize,
+                                TotalCount = arrayResponse.Data.Count // This is not accurate but better than nothing
+                            },
+                            Message = arrayResponse.Message,
+                            StatusCode = arrayResponse.StatusCode
+                        };
+                    }
+                }
             }
 
             _logger.LogWarning("Failed to get palettes. Status: {StatusCode}, Content: {Content}",

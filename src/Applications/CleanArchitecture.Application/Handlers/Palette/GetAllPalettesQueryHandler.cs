@@ -19,6 +19,7 @@ public class GetAllPalettesQueryHandler : IQueryHandler<GetAllPalettesSearchQuer
             {
                 PaletteId = p.PaletteId,
                 Name = p.Name,
+                CreatedTime = p.CreatedTime,
                 Colors = p.Colors.Select(c => new ColorDto
                 {
                     R = c.R,

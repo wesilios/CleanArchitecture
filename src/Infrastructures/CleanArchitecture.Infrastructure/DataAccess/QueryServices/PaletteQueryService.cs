@@ -21,7 +21,7 @@ public class PaletteQueryService : IPaletteQueryService
 
         // This SQL fetches the Palette and all its Colors efficiently
         const string sql = @"
-                SELECT p.PaletteId, p.Name, c.R, c.G, c.B, c.A
+                SELECT p.PaletteId, p.Name, p.CreatedTime, c.R, c.G, c.B, c.A
                 FROM Palettes p
                 LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId
                 WHERE p.PaletteId = @PaletteId";
@@ -62,9 +62,9 @@ public class PaletteQueryService : IPaletteQueryService
         var totalCount = await connection.QuerySingleAsync<int>(countSql, parameters);
 
         var sql = @"
-                SELECT p.PaletteId, p.Name, c.R, c.G, c.B, c.A
+                SELECT p.PaletteId, p.Name, p.CreatedTime, c.R, c.G, c.B, c.A
                 FROM Palettes p
-                LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId 
+                LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId
                 WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)
                 ORDER BY p.PaletteId DESC
                 OFFSET @Offset ROWS

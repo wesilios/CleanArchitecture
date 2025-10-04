@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using CleanArchitecture.Application.Common;
+﻿using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.DataObjects;
 
 namespace CleanArchitecture.Presentation.Api.Responses;
@@ -24,14 +23,4 @@ public class PalettePaginationResponse : IPaginationResponse<PaletteResponse>
     public int TotalCount { get; set; }
     public int PageNumber { get; set; }
     public int ItemsPerPage { get; set; }
-
-    public IEnumerator<PaletteResponse> GetEnumerator()
-    {
-        return Results.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
 }
