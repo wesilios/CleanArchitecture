@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "clients", "clients", "{C4AC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "External.Client.ApiConsumer", "clients\External.Client.ApiConsumer\External.Client.ApiConsumer.csproj", "{41B07283-D75C-45E9-AD7A-31281FC96E64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "External.Client.ApiConsumer.Tests", "clients\External.Client.ApiConsumer.Tests\External.Client.ApiConsumer.Tests.csproj", "{E3C1C8DB-D6B9-4D4E-A4EE-9F726C9C45C8}"
+EndProject
 #endif
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,7 @@ Global
 #endif
 #if (withExternalClientApp)
 		{41B07283-D75C-45E9-AD7A-31281FC96E64} = {C4AC2C80-EC93-4C62-8064-F60FBE7DC830}
+		{E3C1C8DB-D6B9-4D4E-A4EE-9F726C9C45C8} = {C4AC2C80-EC93-4C62-8064-F60FBE7DC830}
 #endif
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -125,6 +128,10 @@ Global
 		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41B07283-D75C-45E9-AD7A-31281FC96E64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C1C8DB-D6B9-4D4E-A4EE-9F726C9C45C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C1C8DB-D6B9-4D4E-A4EE-9F726C9C45C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C1C8DB-D6B9-4D4E-A4EE-9F726C9C45C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C1C8DB-D6B9-4D4E-A4EE-9F726C9C45C8}.Release|Any CPU.Build.0 = Release|Any CPU
 #endif
 	EndGlobalSection
 EndGlobal

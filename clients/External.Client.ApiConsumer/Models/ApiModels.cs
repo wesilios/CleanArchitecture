@@ -35,7 +35,8 @@ public class ApiResponseException : Exception
         StatusCode = statusCode;
     }
 
-    public ApiResponseException(int statusCode, string message, Exception innerException) : base(message, innerException)
+    public ApiResponseException(int statusCode, string message, Exception innerException) : base(message,
+        innerException)
     {
         StatusCode = statusCode;
     }

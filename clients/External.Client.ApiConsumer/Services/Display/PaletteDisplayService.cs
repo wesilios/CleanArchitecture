@@ -8,6 +8,13 @@ namespace External.Client.ApiConsumer.Services.Display;
 /// </summary>
 public class PaletteDisplayService : IPaletteDisplayService
 {
+    private readonly PaletteSettings _paletteSettings;
+
+    public PaletteDisplayService(PaletteSettings paletteSettings)
+    {
+        _paletteSettings = paletteSettings;
+    }
+
     public void DisplayWelcome()
     {
         AnsiConsole.WriteLine();
@@ -72,7 +79,7 @@ public class PaletteDisplayService : IPaletteDisplayService
         foreach (var palette in palettes.Items)
         {
             var colorCount = palette.Colors.Count();
-            const int maxColors = 5;
+            var maxColors = _paletteSettings.MaxColorsPerPalette;
             var statusText = colorCount == maxColors
                 ? $"[red bold]{colorCount}/{maxColors} FULL[/]"
                 : $"[green]{colorCount}/{maxColors}[/]";

@@ -1,3 +1,4 @@
+using External.Client.ApiConsumer.Models;
 using External.Client.ApiConsumer.Services.Display;
 using External.Client.ApiConsumer.Services.Input;
 using Microsoft.Extensions.Logging;
@@ -12,17 +13,20 @@ public class PaletteCommandHandler : IPaletteCommandHandler
     private readonly IPaletteDisplayService _displayService;
     private readonly IPaletteInputService _inputService;
     private readonly IPaletteService _paletteService;
+    private readonly PaletteSettings _paletteSettings;
     private readonly ILogger<PaletteCommandHandler> _logger;
 
     public PaletteCommandHandler(
         IPaletteDisplayService displayService,
         IPaletteInputService inputService,
         IPaletteService paletteService,
+        PaletteSettings paletteSettings,
         ILogger<PaletteCommandHandler> logger)
     {
         _displayService = displayService;
         _inputService = inputService;
         _paletteService = paletteService;
+        _paletteSettings = paletteSettings;
         _logger = logger;
     }
 
@@ -182,7 +186,7 @@ public class PaletteCommandHandler : IPaletteCommandHandler
         while (continueAdding && palette != null)
         {
             var currentColorCount = palette.Colors?.Count ?? 0;
-            const int maxColors = 5;
+            var maxColors = _paletteSettings.MaxColorsPerPalette;
             var remainingSlots = maxColors - currentColorCount;
 
             // Display current palette capacity status
@@ -190,7 +194,8 @@ public class PaletteCommandHandler : IPaletteCommandHandler
 
             if (remainingSlots <= 0)
             {
-                _displayService.DisplayMessage("This palette is already full (5/5 colors). Cannot add more colors.");
+                _displayService.DisplayMessage(
+                    $"This palette is already full ({maxColors}/{maxColors} colors). Cannot add more colors.");
                 break;
             }
 
@@ -235,7 +240,7 @@ public class PaletteCommandHandler : IPaletteCommandHandler
             // Check if palette is now full
             if (updatedRemainingSlots <= 0)
             {
-                _displayService.DisplaySuccess("Palette is now full! All 5 color slots have been used.");
+                _displayService.DisplaySuccess($"Palette is now full! All {maxColors} color slots have been used.");
                 continueAdding = false;
                 continue;
             }

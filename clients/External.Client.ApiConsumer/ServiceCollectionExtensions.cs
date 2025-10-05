@@ -1,3 +1,4 @@
+using External.Client.ApiConsumer.Models;
 using External.Client.ApiConsumer.Services;
 using External.Client.ApiConsumer.Services.Display;
 using External.Client.ApiConsumer.Services.Handlers;
@@ -20,6 +21,12 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static void AddConsoleServices(this IServiceCollection services, IConfiguration configuration)
     {
+        // Configure palette settings
+        var paletteSettings = new PaletteSettings();
+        configuration.GetSection("PaletteSettings").Bind(paletteSettings);
+        paletteSettings.Validate();
+        services.AddSingleton(paletteSettings);
+
         // Configure Refit API client
         var apiBaseUrl = configuration.GetValue<string>("ApiSettings:BaseUrl") ?? "https://localhost:7001";
 
