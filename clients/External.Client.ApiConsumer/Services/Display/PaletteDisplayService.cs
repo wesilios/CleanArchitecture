@@ -90,13 +90,13 @@ public class PaletteDisplayService : IPaletteDisplayService
 
             foreach (var color in displayedColors)
             {
-                colorPreview += $"[on rgb({color.R},{color.G},{color.B})] ■ [/]";
+                colorPreview += $"[on rgb({color.R},{color.G},{color.B})]  [/]";
             }
 
             // Add empty slots if less than max colors
             for (var i = colorCount; i < maxColors; i++)
             {
-                colorPreview += "[dim]□[/]";
+                colorPreview += "[dim] [/]";
             }
 
             if (colorCount == 0)
@@ -128,24 +128,20 @@ public class PaletteDisplayService : IPaletteDisplayService
         AnsiConsole.Write(table);
 
         // Pagination info
-        if (palettes.TotalPages > 1)
-        {
-            var paginationHints = new List<string>();
+        if (palettes.TotalPages <= 1) return;
+        var paginationHints = new List<string>();
 
-            if (palettes.HasPreviousPage)
-                paginationHints.Add("[cyan]← Previous page available[/]");
+        if (palettes.HasPreviousPage)
+            paginationHints.Add("[cyan]← Previous page available[/]");
 
-            paginationHints.Add($"[yellow]Page {palettes.PageNumber} of {palettes.TotalPages}[/]");
+        paginationHints.Add($"[yellow]Page {palettes.PageNumber} of {palettes.TotalPages}[/]");
 
-            if (palettes.HasNextPage)
-                paginationHints.Add("[cyan]Next page available →[/]");
+        if (palettes.HasNextPage)
+            paginationHints.Add("[cyan]Next page available →[/]");
 
-            if (paginationHints.Any())
-            {
-                AnsiConsole.WriteLine();
-                AnsiConsole.MarkupLine($"[dim italic]{string.Join(" | ", paginationHints)}[/]");
-            }
-        }
+        if (!paginationHints.Any()) return;
+        AnsiConsole.WriteLine();
+        AnsiConsole.MarkupLine($"[dim italic]{string.Join(" | ", paginationHints)}[/]");
     }
 
     public void DisplayPaletteDetails(PaletteResponse palette)
@@ -226,7 +222,7 @@ public class PaletteDisplayService : IPaletteDisplayService
         {
             var rgbText = $"({color.R}, {color.G}, {color.B})";
             var alphaText = $"{color.A:F2}";
-            var colorBlock = $"[on rgb({color.R},{color.G},{color.B})] ████ [/]";
+            var colorBlock = $"[on rgb({color.R},{color.G},{color.B})]          [/]";
             var hexValue = !string.IsNullOrEmpty(color.Hex) ? color.Hex : $"#{color.R:X2}{color.G:X2}{color.B:X2}";
 
             // Calculate brightness (perceived luminance)

@@ -57,18 +57,39 @@ public class PaletteQueryService : IPaletteQueryService
         };
 
         var countSql = @"SELECT COUNT(DISTINCT p.PaletteId) FROM Palettes p 
-                       WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)";
+                   WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)";
 
         var totalCount = await connection.QuerySingleAsync<int>(countSql, parameters);
 
+        // First, get the paginated palette IDs
+        var paletteIdsSql = @"
+            SELECT p.PaletteId
+            FROM Palettes p
+            WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)
+            ORDER BY p.PaletteId DESC
+            OFFSET @Offset ROWS
+            FETCH NEXT @PageSize ROWS ONLY";
+
+        var paletteIds = await connection.QueryAsync<long>(paletteIdsSql, parameters);
+
+        if (!paletteIds.Any())
+        {
+            return new PagedList<Palette>
+            {
+                Results = new List<Palette>(),
+                TotalCount = totalCount,
+                PageNumber = searchQuery.PaginationParameters.PageNumber,
+                PageSize = searchQuery.PaginationParameters.PageSize
+            };
+        }
+
+        // Then get the full palette data with colors for those specific palettes
         var sql = @"
-                SELECT p.PaletteId, p.Name, p.CreatedTime, c.R, c.G, c.B, c.A
-                FROM Palettes p
-                LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId
-                WHERE (@SearchTerm IS NULL OR p.Name LIKE @SearchTerm)
-                ORDER BY p.PaletteId DESC
-                OFFSET @Offset ROWS
-                FETCH NEXT @PageSize ROWS ONLY";
+            SELECT p.PaletteId, p.Name, p.CreatedTime, c.R, c.G, c.B, c.A
+            FROM Palettes p
+            LEFT JOIN PaletteColors c ON p.PaletteId = c.PaletteId
+            WHERE p.PaletteId IN @PaletteIds
+            ORDER BY p.PaletteId DESC";
 
         var paletteDictionary = new Dictionary<long, Palette>();
 
@@ -86,7 +107,7 @@ public class PaletteQueryService : IPaletteQueryService
             }
 
             return existingPalette;
-        }, parameters, splitOn: "R");
+        }, new { PaletteIds = paletteIds }, splitOn: "R");
 
         return new PagedList<Palette>
         {

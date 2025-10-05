@@ -104,7 +104,7 @@ public class PaletteInputService : IPaletteInputService
 
             // Get Alpha component
             var a = AnsiConsole.Prompt(
-                new TextPrompt<decimal>("[yellow]Alpha transparency (0.0-1.0) [1.0]:[/]")
+                new TextPrompt<decimal>("[yellow]Alpha transparency (0.0-1.0) [[1.0]]:[/]")
                     .DefaultValue(1.0m)
                     .ValidationErrorMessage("[red]Please enter a value between 0.0 and 1.0[/]")
                     .Validate(value =>
@@ -151,9 +151,25 @@ public class PaletteInputService : IPaletteInputService
 
             return new CreatePaletteColorRequest { R = r, G = g, B = b, A = a };
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             AnsiConsole.MarkupLine("[red]Invalid input. Please try again.[/]");
+            AnsiConsole.WriteException(ex, new ExceptionSettings
+            {
+                // Format = ExceptionFormats.ShortenEverything | ExceptionFormats.ShowLinks,
+                Style = new ExceptionStyle
+                {
+                    Exception = new Style().Foreground(Color.Grey),
+                    Message = new Style().Foreground(Color.White),
+                    NonEmphasized = new Style().Foreground(Color.Cornsilk1),
+                    Parenthesis = new Style().Foreground(Color.Cornsilk1),
+                    Method = new Style().Foreground(Color.Red),
+                    ParameterName = new Style().Foreground(Color.Cornsilk1),
+                    ParameterType = new Style().Foreground(Color.Red),
+                    Path = new Style().Foreground(Color.Red),
+                    LineNumber = new Style().Foreground(Color.Cornsilk1),
+                }
+            });
             return null;
         }
     }
