@@ -78,7 +78,7 @@ public class PaletteDisplayService : IPaletteDisplayService
 
         foreach (var palette in palettes.Items)
         {
-            var colorCount = palette.Colors.Count();
+            var colorCount = palette.Colors.Count;
             var maxColors = _paletteSettings.MaxColorsPerPalette;
             var statusText = colorCount == maxColors
                 ? $"[red bold]{colorCount}/{maxColors} FULL[/]"
@@ -151,7 +151,7 @@ public class PaletteDisplayService : IPaletteDisplayService
     public void DisplayPaletteDetails(PaletteResponse palette)
     {
         var colorCount = palette.Colors.Count;
-        const int maxColors = 5;
+        var maxColors = _paletteSettings.MaxColorsPerPalette;
         var statusText = colorCount == maxColors ? "[red bold]FULL[/]" : "[green]AVAILABLE[/]";
         var createdDate = palette.CreatedTime.ToString("yyyy-MM-dd");
 
