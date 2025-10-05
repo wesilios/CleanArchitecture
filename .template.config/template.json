@@ -1,55 +1,213 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Que Nguyen",
-  "classifications": [ "APS.NET", "Web", "Clean Architecture" ],
+  "classifications": [
+    "ASP.NET",
+    "CleanArchitecture",
+    "DDD",
+    "Web",
+    "gRPC",
+    "RazorPages",
+    "AzureInfrastructure"
+  ],
   "identity": "Clean.Architecture.Solution",
   "name": "Clean Architecture Solution",
   "description": "A Clean Architecture Solution Template for creating Web Applications and CI/CD pipeline with ASP.NET Core.",
   "shortName": "cleanarchitecturesln",
   "tags": {
     "language": "C#",
-    "type": "project"
+    "type": "solution"
   },
+  "sourceName": "CleanArchitecture",
   "preferNameDirectory": true,
   "symbols": {
-    "Framework": {
+    "iisExpressPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"58375"
+      },
+      "replaces": "58375"
+    },
+    "httpPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"5285"
+      },
+      "replaces": "5285"
+    },
+    "httpsPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"7190"
+      },
+      "replaces": "7190"
+    },
+    "targetFramework": {
       "type": "parameter",
-      "description": "The target framework for the project",
       "datatype": "choice",
       "choices": [
         {
-          "choice": "net6.0"
+          "choice": "net8.0",
+          "description": ".NET 8.0"
         },
         {
-          "choice": "net8.0"
+          "choice": "net6.0",
+          "description": ".NET 6.0"
         }
       ],
-      "replaces": "{TargetFramework}"
+      "defaultValue": "net8.0",
+      "replaces": "net8.0",
+      "description": "The target framework for the projects solution."
     },
-    "SwaggerSupported": {
+    "database": {
       "type": "parameter",
-      "description": "Enable swagger support",
-      "datatype": "bool",
-      "defaultValue": "true"
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "sqlite",
+          "description": "SQLite"
+        },
+        {
+          "choice": "sqlserver",
+          "description": "SQL Server"
+        }
+      ],
+      "defaultValue": "sqlserver",
+      "description": "The database type to use."
     },
-    "IncludeDevAppSettings": {
+    "useAzure": {
       "type": "parameter",
-      "description": "Adding appsettings.Development.json",
       "datatype": "bool",
-      "defaultValue": "true,
+      "defaultValue": "true",
+      "description": "Whether to use Azure services."
+    },
+    "useSqlite": {
+      "type": "computed",
+      "value": "(database == \"sqlite\")"
+    },
+    "useSqlServer": {
+      "type": "computed",
+      "value": "(database == \"sqlserver\")"
+    },
+    "useApi": {
+      "type": "parameter",
       "datatype": "bool",
-      "defaultValue": "true"
+      "defaultValue": "true",
+      "description": "Whether to include Presentation Layer Web API."
+    },
+    "useGrpc": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include Presentation Layer gRPC."
+    },
+    "useRazorPages": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include Presentation Layer Razor Pages."
+    },
+    "useConsoleApp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include Presentation Layer Console App."
+    },
+    "withExternalClientApp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include an external client app."
     }
   },
   "sources": [
     {
+      "source": "./",
+      "target": "./",
+      "exclude": [
+        ".vs/**",
+        ".vscode/**",
+        ".git/**",
+        ".github/**",
+        ".idea/**",
+        ".template.config/**",
+        "templates/**",
+        "samples/**",
+        "**/*.filelist",
+        "**/*.user",
+        "**/*.lock.json",
+        "*.nuspec",
+        "bin/**",
+        "obj/**",
+        "**/bin/**",
+        "**/obj/**",
+        "README.md",
+        "**/README.md",
+        "LICENSE"
+      ],
       "modifiers": [
         {
-          "condition" :"(!IncludeDevAppSettings)",
+          "condition": "(useAzure)",
           "exclude": [
-            "/appsettings.Development.json"
+            "src/Applications/CleanArchitecture.Presentation.Api/appsettings.Development.json"
+          ],
+          "rename": {
+            "src/Presentations/CleanArchitecture.Presentation.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Presentation.Api/appsettings.Development.json"
+          }
+        },
+        {
+          "condition": "(!useAzure)",
+          "exclude": [
+            "src/Applications/CleanArchitecture.Presentation.Api/appsettings.UseAzure.json",
+            "src/Infrastructures/CleanArchitecture.Infrastructure.Azure/**"
           ]
+        },
+        {
+          "condition": "(!useApi)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Presentation.Api/**"
+          ]
+        },
+        {
+          "condition": "(!useGrpc)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Presentation.Grpc/**"
+          ]
+        },
+        {
+          "condition": "(!useRazorPages)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Presentation.Web/**"
+          ]
+        },
+        {
+          "condition": "(!useConsoleApp)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Presentation.Console/**"
+          ]
+        },
+        {
+          "condition": "(!withExternalClientApp)",
+          "exclude": [
+            "clients/**"
+          ]
+        },
+        {
+          "rename": {
+            "README.template.md": "README.md"
+          }
         }
+      ]
+    }
+  ],
+  "modifiers": [
+    {
+      "exclude": [
+        "README.md",
+        "LICENSE"
       ]
     }
   ]
