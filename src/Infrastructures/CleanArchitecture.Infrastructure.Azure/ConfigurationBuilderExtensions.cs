@@ -7,14 +7,17 @@ namespace CleanArchitecture.Infrastructure.Azure;
 
 public static class ConfigurationBuilderExtensions
 {
-    public static void AddAzureKeyVault(this IConfigurationBuilder configurationBuilder)
+    public static void AddKeyVault(this IConfigurationBuilder configurationBuilder)
     {
         var configuration = configurationBuilder.Build();
+        bool enabled = bool.Parse(configuration["Azure:KeyVault:Enabled"] ?? "false");
+        if (!enabled) return;
 
-        var keyVaultUrl = configuration["Azure:KeyVault:Url"];
         var tenantId = configuration["Azure:TenantId"];
         var clientId = configuration["Azure:ClientId"];
         var clientSecret = configuration["Azure:ClientSecret"];
+
+        var keyVaultUrl = configuration["Azure:KeyVault:Url"];
 
         var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
 

@@ -3,12 +3,12 @@
   "author": "Que Nguyen",
   "classifications": [
     "ASP.NET",
-    "Clean Architecture",
+    "CleanArchitecture",
     "DDD",
     "Web",
     "gRPC",
-    "Razor Pages",
-    "Azure Infrastructure"
+    "RazorPages",
+    "AzureInfrastructure"
   ],
   "identity": "Clean.Architecture.Solution",
   "name": "Clean Architecture Solution",
@@ -21,14 +21,29 @@
   "sourceName": "CleanArchitecture",
   "preferNameDirectory": true,
   "symbols": {
-    "port": {
+    "iisExpressPort": {
       "type": "generated",
-      "generator": "random",
+      "generator": "port",
       "parameters": {
-        "min": 5000,
-        "max": 65000
+        "fallback":"58375"
       },
       "replaces": "58375"
+    },
+    "httpPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"5285"
+      },
+      "replaces": "5285"
+    },
+    "httpsPort": {
+      "type": "generated",
+      "generator": "port",
+      "parameters": {
+        "fallback":"7190"
+      },
+      "replaces": "7190"
     },
     "targetFramework": {
       "type": "parameter",
@@ -81,19 +96,31 @@
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "true",
-      "description": "Whether to include Web API."
+      "description": "Whether to include Presentation Layer Web API."
     },
     "useGrpc": {
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "false",
-      "description": "Whether to include gRPC."
+      "description": "Whether to include Presentation Layer gRPC."
     },
     "useRazorPages": {
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "false",
-      "description": "Whether to include Razor Pages."
+      "description": "Whether to include Presentation Layer Razor Pages."
+    },
+    "useConsoleApp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include Presentation Layer Console App."
+    },
+    "withExternalClientApp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Whether to include an external client app."
     }
   },
   "sources": [
@@ -113,41 +140,67 @@
         "**/*.user",
         "**/*.lock.json",
         "*.nuspec",
-        "README.md",
-        "LICENSE",
         "bin/**",
         "obj/**",
         "**/bin/**",
-        "**/obj/**"
+        "**/obj/**",
+        "README.md",
+        "**/README.md",
+        "LICENSE"
       ],
       "modifiers": [
         {
           "condition": "(useAzure)",
           "exclude": [
-            "src/Applications/CleanArchitecture.Api/appsettings.Development.json"
+            "src/Applications/CleanArchitecture.Presentation.Api/appsettings.Development.json"
           ],
           "rename": {
-            "src/Presentations/CleanArchitecture.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Api/appsettings.Development.json"
+            "src/Presentations/CleanArchitecture.Presentation.Api/appsettings.UseAzure.json": "src/Presentations/CleanArchitecture.Presentation.Api/appsettings.Development.json"
           }
         },
         {
           "condition": "(!useApi)",
           "exclude": [
-            "src/Presentations/CleanArchitecture.Api/**"
+            "src/Presentations/CleanArchitecture.Presentation.Api/**"
           ]
         },
         {
           "condition": "(!useGrpc)",
           "exclude": [
-            "src/Presentations/CleanArchitecture.Grpc/**"
+            "src/Presentations/CleanArchitecture.Presentation.Grpc/**"
           ]
         },
         {
           "condition": "(!useRazorPages)",
           "exclude": [
-            "src/Presentations/CleanArchitecture.Web/**"
+            "src/Presentations/CleanArchitecture.Presentation.Web/**"
           ]
+        },
+        {
+          "condition": "(!useConsoleApp)",
+          "exclude": [
+            "src/Presentations/CleanArchitecture.Presentation.Console/**"
+          ]
+        },
+        {
+          "condition": "(!withExternalClientApp)",
+          "exclude": [
+            "clients/**"
+          ]
+        },
+        {
+          "rename": {
+            "README.template.md": "README.md"
+          }
         }
+      ]
+    }
+  ],
+  "modifiers": [
+    {
+      "exclude": [
+        "README.md",
+        "LICENSE"
       ]
     }
   ]

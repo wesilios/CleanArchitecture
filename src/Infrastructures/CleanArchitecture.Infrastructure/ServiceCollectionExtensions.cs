@@ -1,4 +1,10 @@
-﻿using CleanArchitecture.Infrastructure.DataAccess;
+﻿using CleanArchitecture.Application;
+using CleanArchitecture.Application.Commands;
+using CleanArchitecture.Application.Common;
+using CleanArchitecture.Application.DataObjects;
+using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Queries;
+using CleanArchitecture.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,9 +15,35 @@ public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("CleanArchitectureDb");
+        services.AddDataAccessServices(configuration);
+        services.AddApplicationServices();
+    }
+    
+    private static void AddApplicationServices(this IServiceCollection services)
+    {
+        // Register Query Services (the Infrastructure implementations)
+        services.AddScoped<IPaletteQueryService, PaletteQueryService>();
+
+        // Register Repositories (the Infrastructure implementations)
+        services.AddScoped<IPaletteRepository, PaletteRepository>();
         
-        services.AddDbContextFactory<ApplicationDbContext>(options =>
+        // Register the Dispatcher
+        services.AddScoped<IDispatcher, Dispatcher>();
+        
+        // Register Query/Command Handlers
+        services.AddTransient<ICommandHandler<CreateColorToPaletteCommand>, CreateColorToPaletteHandler>();
+        services.AddTransient<ICommandHandler<CreatePaletteCommand>, CreatePaletteCommandHandler>();
+        services.AddTransient<ICommandHandler<UpdatePaletteCommand>, UpdatePaletteCommandHandler>();
+        services.AddTransient<ICommandHandler<DeletePaletteCommand>, DeletePaletteCommandHandler>();
+        services.AddTransient<IQueryHandler<GetAllPalettesSearchQuery, IPagedList<IPaletteDto>>, GetAllPalettesQueryHandler>();
+        services.AddTransient<IQueryHandler<GetPaletteByIdQuery, IPaletteDto>, GetPaletteByIdQueryHandler>();
+    }
+
+    private static void AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("CleanArchitectureDb");
+
+        services.AddDbContextFactory<CleanArchitectureDbContext>(options =>
         {
 #if (useSqlite)
             options.UseSqlite(connectionString);
@@ -19,8 +51,8 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(connectionString);
 #endif
         });
-        
-        services.AddScoped<IApplicationConnectionFactory, ApplicationConnectionFactory>(_ =>
-            new ApplicationConnectionFactory(connectionString));
+
+        services.AddScoped<ICleanArchitectureConnectionFactory, CleanArchitectureConnectionFactory>(_ =>
+            new CleanArchitectureConnectionFactory(connectionString));
     }
 }
