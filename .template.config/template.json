@@ -159,6 +159,13 @@
           }
         },
         {
+          "condition": "(!useAzure)",
+          "exclude": [
+            "src/Applications/CleanArchitecture.Presentation.Api/appsettings.UseAzure.json",
+            "src/Infrastructures/CleanArchitecture.Infrastructure.Azure/**"
+          ]
+        },
+        {
           "condition": "(!useApi)",
           "exclude": [
             "src/Presentations/CleanArchitecture.Presentation.Api/**"
