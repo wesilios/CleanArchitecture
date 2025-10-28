@@ -1,5 +1,5 @@
 using External.Client.ApiConsumer.Models;
-using FluentAssertions;
+using Shouldly;
 
 namespace External.Client.ApiConsumer.Tests.Models;
 
@@ -12,9 +12,9 @@ public class BaseApiResponseTests
         var response = new BaseApiResponse<string>();
 
         // Assert
-        response.Data.Should().BeNull();
-        response.Message.Should().Be(string.Empty);
-        response.StatusCode.Should().Be(0);
+        response.Data.ShouldBeNull();
+        response.Message.ShouldBe(string.Empty);
+        response.StatusCode.ShouldBe(0);
     }
 
     [Fact]
@@ -34,9 +34,9 @@ public class BaseApiResponseTests
         };
 
         // Assert
-        response.Data.Should().Be(testData);
-        response.Message.Should().Be(testMessage);
-        response.StatusCode.Should().Be(testStatusCode);
+        response.Data.ShouldBe(testData);
+        response.Message.ShouldBe(testMessage);
+        response.StatusCode.ShouldBe(testStatusCode);
     }
 
     [Theory]
@@ -59,7 +59,7 @@ public class BaseApiResponseTests
         var result = response.EnsureSuccess();
 
         // Assert
-        result.Should().Be(testData);
+        result.ShouldBe(testData);
     }
 
     [Theory]
@@ -78,9 +78,8 @@ public class BaseApiResponseTests
         };
 
         // Act & Assert
-        response.Invoking(r => r.EnsureSuccess())
-            .Should().Throw<ApiResponseException>()
-            .Which.StatusCode.Should().Be(statusCode);
+        var exception = Should.Throw<ApiResponseException>(() => response.EnsureSuccess());
+        exception.StatusCode.ShouldBe(statusCode);
     }
 
     [Fact]
@@ -96,9 +95,8 @@ public class BaseApiResponseTests
         };
 
         // Act & Assert
-        response.Invoking(r => r.EnsureSuccess())
-            .Should().Throw<ApiResponseException>()
-            .Which.Message.Should().Be(errorMessage);
+        var exception = Should.Throw<ApiResponseException>(() => response.EnsureSuccess());
+        exception.Message.ShouldBe(errorMessage);
     }
 
     [Theory]
@@ -117,8 +115,7 @@ public class BaseApiResponseTests
         };
 
         // Act & Assert
-        response.Invoking(r => r.EnsureSuccess())
-            .Should().Throw<ApiResponseException>();
+        Should.Throw<ApiResponseException>(() => response.EnsureSuccess());
     }
 
     [Fact]
@@ -136,7 +133,7 @@ public class BaseApiResponseTests
         var result = response.EnsureSuccess();
 
         // Assert
-        result.Should().BeNull();
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -164,7 +161,7 @@ public class BaseApiResponseTests
         var result = response.EnsureSuccess();
 
         // Assert
-        result.Should().BeEquivalentTo(complexData);
+        result.ShouldBeEquivalentTo(complexData);
     }
 }
 
@@ -181,8 +178,8 @@ public class ApiResponseExceptionTests
         var exception = new ApiResponseException(statusCode, message);
 
         // Assert
-        exception.StatusCode.Should().Be(statusCode);
-        exception.Message.Should().Be(message);
+        exception.StatusCode.ShouldBe(statusCode);
+        exception.Message.ShouldBe(message);
     }
 
     [Fact]
@@ -195,8 +192,8 @@ public class ApiResponseExceptionTests
         var exception = new ApiResponseException(statusCode, string.Empty);
 
         // Assert
-        exception.StatusCode.Should().Be(statusCode);
-        exception.Message.Should().Be(string.Empty);
+        exception.StatusCode.ShouldBe(statusCode);
+        exception.Message.ShouldBe(string.Empty);
     }
 
     [Fact]
@@ -206,6 +203,6 @@ public class ApiResponseExceptionTests
         var exception = new ApiResponseException(400, "Bad Request");
 
         // Assert
-        exception.Should().BeAssignableTo<Exception>();
+        exception.ShouldBeAssignableTo<Exception>();
     }
 }

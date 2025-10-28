@@ -1,9 +1,9 @@
 using External.Client.ApiConsumer.Models;
 using External.Client.ApiConsumer.Services;
 using External.Client.ApiConsumer.Services.HttpClients;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Shouldly;
 
 namespace External.Client.ApiConsumer.Tests.Services;
 
@@ -47,8 +47,8 @@ public class PaletteServiceTests
         var result = await _paletteService.GetPalettesAsync(1, 10);
 
         // Assert
-        result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(expectedResponse.Data);
+        result.ShouldNotBeNull();
+        result.ShouldBeEquivalentTo(expectedResponse.Data);
         _mockApiClient.Verify(x => x.GetPalettesAsync(1, 10, null), Times.Once);
     }
 
@@ -84,7 +84,7 @@ public class PaletteServiceTests
         var result = await _paletteService.GetPalettesAsync(1, 10);
 
         // Assert
-        result.Should().BeNull();
+        result.ShouldBeNull();
     }
 
     [Fact]
@@ -113,8 +113,8 @@ public class PaletteServiceTests
         var result = await _paletteService.GetPaletteByIdAsync(paletteId);
 
         // Assert
-        result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(expectedResponse.Data);
+        result.ShouldNotBeNull();
+        result.ShouldBeEquivalentTo(expectedResponse.Data);
         _mockApiClient.Verify(x => x.GetPaletteByIdAsync(paletteId), Times.Once);
     }
 
@@ -136,7 +136,7 @@ public class PaletteServiceTests
         var result = await _paletteService.CreatePaletteAsync(paletteName);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
         _mockApiClient.Verify(x => x.CreatePaletteAsync(It.Is<CreatePaletteRequest>(r => r.Name == paletteName)),
             Times.Once);
     }
@@ -152,7 +152,7 @@ public class PaletteServiceTests
         var result = await _paletteService.CreatePaletteAsync("Test");
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -174,7 +174,7 @@ public class PaletteServiceTests
         var result = await _paletteService.UpdatePaletteAsync(paletteId, newName);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
         _mockApiClient.Verify(x => x.UpdatePaletteAsync(paletteId, It.Is<UpdatePaletteRequest>(r => r.Name == newName)),
             Times.Once);
     }
@@ -197,7 +197,7 @@ public class PaletteServiceTests
         var result = await _paletteService.DeletePaletteAsync(paletteId);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
         _mockApiClient.Verify(x => x.DeletePaletteAsync(paletteId), Times.Once);
     }
 
@@ -224,7 +224,7 @@ public class PaletteServiceTests
         var result = await _paletteService.AddColorToPaletteAsync(paletteId, r, g, b, a);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
         _mockApiClient.Verify(
             x => x.AddColorToPaletteAsync(paletteId,
                 It.Is<CreatePaletteColorRequest>(req => req.R == r && req.G == g && req.B == b && req.A == a)),
@@ -242,6 +242,6 @@ public class PaletteServiceTests
         var result = await _paletteService.AddColorToPaletteAsync(1L, 255, 0, 0, 1.0m);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 }

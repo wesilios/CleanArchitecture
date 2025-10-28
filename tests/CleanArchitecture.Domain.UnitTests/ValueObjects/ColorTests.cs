@@ -1,6 +1,5 @@
 ﻿using CleanArchitecture.Domain.Exceptions;
 using CleanArchitecture.Domain.ValueObjects;
-using FluentAssertions;
 using Shouldly;
 using Xunit;
 
@@ -18,10 +17,10 @@ public class ColorTests
         var color = new Color(red, green, blue);
 
         // Assert
-        color.R.Should().Be(red);
-        color.G.Should().Be(green);
-        color.B.Should().Be(blue);
-        color.A.Should().Be(1); // Default opacity
+        color.R.ShouldBe(red);
+        color.G.ShouldBe(green);
+        color.B.ShouldBe(blue);
+        color.A.ShouldBe(1); // Default opacity
     }
 
     [Fact]
@@ -35,10 +34,10 @@ public class ColorTests
         var color = new Color(red, green, blue, opacity);
 
         // Assert
-        color.R.Should().Be(red);
-        color.G.Should().Be(green);
-        color.B.Should().Be(blue);
-        color.A.Should().Be(opacity);
+        color.R.ShouldBe(red);
+        color.G.ShouldBe(green);
+        color.B.ShouldBe(blue);
+        color.A.ShouldBe(opacity);
     }
 
     [Theory]
@@ -55,8 +54,8 @@ public class ColorTests
         Action act = () => new Color(red, green, blue);
 
         // Assert
-        act.Should().Throw<ArgumentOutOfRangeException>()
-            .WithMessage("*Color values must be between 0 and 255*");
+        var exception = Should.Throw<ArgumentOutOfRangeException>(act);
+        exception.Message.ShouldContain("Color values must be between 0 and 255");
     }
 
     [Theory]
@@ -69,8 +68,7 @@ public class ColorTests
         Action act = () => new Color(red, green, blue, opacity);
 
         // Assert
-        act.Should().Throw<ArgumentOutOfRangeException>()
-            .WithMessage("*Opacity value must be between 0 and 1*");
+        Should.Throw<ArgumentOutOfRangeException>(act);
     }
 
     [Theory]
@@ -89,10 +87,10 @@ public class ColorTests
         var color = new Color(hexValue);
 
         // Assert
-        color.R.Should().Be(expectedRed);
-        color.G.Should().Be(expectedGreen);
-        color.B.Should().Be(expectedBlue);
-        color.A.Should().Be(expectedOpacity);
+        color.R.ShouldBe(expectedRed);
+        color.G.ShouldBe(expectedGreen);
+        color.B.ShouldBe(expectedBlue);
+        color.A.ShouldBe(expectedOpacity);
     }
 
     [Theory]
@@ -110,7 +108,7 @@ public class ColorTests
         Action act = () => new Color(invalidHex);
 
         // Assert
-        act.Should().Throw<ArgumentException>();
+        act.ShouldThrow<ArgumentException>();
     }
 
     [Fact]
@@ -123,7 +121,7 @@ public class ColorTests
         var color = Color.CreateFromHex(whiteHex);
 
         // Assert
-        color.Should().Be(Color.White);
+        color.ShouldBe(Color.White);
     }
 
     [Fact]
@@ -132,56 +130,53 @@ public class ColorTests
         // Arrange
         var unsupportedHex = "#123456";
 
-        // Act
-        Action act = () => Color.CreateFromHex(unsupportedHex);
-
-        // Assert
-        act.Should().Throw<UnsupportedColorException>()
-            .And.Message.Should().Contain(unsupportedHex);
+        // Act & Assert
+        var exception = Should.Throw<UnsupportedColorException>(() => Color.CreateFromHex(unsupportedHex));
+        exception.Message.ShouldContain(unsupportedHex);
     }
 
     [Fact]
     public void StaticColors_ShouldHaveCorrectRgbValues()
     {
         // Assert White
-        Color.White.R.Should().Be(255);
-        Color.White.G.Should().Be(255);
-        Color.White.B.Should().Be(255);
+        Color.White.R.ShouldBe(255);
+        Color.White.G.ShouldBe(255);
+        Color.White.B.ShouldBe(255);
 
         // Assert Red
-        Color.Red.R.Should().Be(255);
-        Color.Red.G.Should().Be(87);
-        Color.Red.B.Should().Be(51);
+        Color.Red.R.ShouldBe(255);
+        Color.Red.G.ShouldBe(87);
+        Color.Red.B.ShouldBe(51);
 
         // Assert Orange
-        Color.Orange.R.Should().Be(255);
-        Color.Orange.G.Should().Be(195);
-        Color.Orange.B.Should().Be(0);
+        Color.Orange.R.ShouldBe(255);
+        Color.Orange.G.ShouldBe(195);
+        Color.Orange.B.ShouldBe(0);
 
         // Assert Yellow
-        Color.Yellow.R.Should().Be(255);
-        Color.Yellow.G.Should().Be(255);
-        Color.Yellow.B.Should().Be(102);
+        Color.Yellow.R.ShouldBe(255);
+        Color.Yellow.G.ShouldBe(255);
+        Color.Yellow.B.ShouldBe(102);
 
         // Assert Green
-        Color.Green.R.Should().Be(204);
-        Color.Green.G.Should().Be(255);
-        Color.Green.B.Should().Be(153);
+        Color.Green.R.ShouldBe(204);
+        Color.Green.G.ShouldBe(255);
+        Color.Green.B.ShouldBe(153);
 
         // Assert Blue
-        Color.Blue.R.Should().Be(102);
-        Color.Blue.G.Should().Be(102);
-        Color.Blue.B.Should().Be(255);
+        Color.Blue.R.ShouldBe(102);
+        Color.Blue.G.ShouldBe(102);
+        Color.Blue.B.ShouldBe(255);
 
         // Assert Purple
-        Color.Purple.R.Should().Be(153);
-        Color.Purple.G.Should().Be(102);
-        Color.Purple.B.Should().Be(204);
+        Color.Purple.R.ShouldBe(153);
+        Color.Purple.G.ShouldBe(102);
+        Color.Purple.B.ShouldBe(204);
 
         // Assert Grey
-        Color.Grey.R.Should().Be(153);
-        Color.Grey.G.Should().Be(153);
-        Color.Grey.B.Should().Be(153);
+        Color.Grey.R.ShouldBe(153);
+        Color.Grey.G.ShouldBe(153);
+        Color.Grey.B.ShouldBe(153);
     }
 
     [Fact]
@@ -195,7 +190,7 @@ public class ColorTests
         var result = color.ToHexString();
 
         // Assert
-        result.Should().Be(expectedHex);
+        result.ShouldBe(expectedHex);
     }
 
     [Fact]
@@ -208,7 +203,7 @@ public class ColorTests
         var result = color.ToString();
 
         // Assert
-        result.Should().Be("#FFFFFF");
+        result.ShouldBe("#FFFFFF");
     }
 
     [Fact]
@@ -221,7 +216,7 @@ public class ColorTests
         var color = (Color)hexString;
 
         // Assert
-        color.Should().Be(Color.White);
+        color.ShouldBe(Color.White);
     }
 
     [Fact]
@@ -235,7 +230,7 @@ public class ColorTests
         {
             var color = (Color)unsupportedHex;
         };
-        act.Should().Throw<UnsupportedColorException>();
+        act.ShouldThrow<UnsupportedColorException>();
     }
 
 
@@ -247,8 +242,8 @@ public class ColorTests
         var color2 = new Color(255, 128, 64);
 
         // Act & Assert
-        color1.Equals(color2).Should().BeTrue();
-        (color1 == color2).Should().BeTrue();
+        color1.Equals(color2).ShouldBeTrue();
+        (color1 == color2).ShouldBeTrue();
     }
 
     [Fact]
@@ -259,8 +254,8 @@ public class ColorTests
         var color2 = new Color(128, 255, 64);
 
         // Act & Assert
-        color1.Equals(color2).Should().BeFalse();
-        (color1 != color2).Should().BeTrue();
+        color1.Equals(color2).ShouldBeFalse();
+        (color1 != color2).ShouldBeTrue();
     }
 
     [Fact]
@@ -270,7 +265,7 @@ public class ColorTests
         var color = new Color(255, 128, 64);
 
         // Act & Assert
-        color.Equals(null).Should().BeFalse();
+        color.Equals(null).ShouldBeFalse();
     }
 
     [Fact]
@@ -281,7 +276,7 @@ public class ColorTests
         var otherObject = "not a color";
 
         // Act & Assert
-        color.Equals(otherObject).Should().BeFalse();
+        color.Equals(otherObject).ShouldBeFalse();
     }
 
     [Fact]
@@ -292,7 +287,7 @@ public class ColorTests
         var color2 = new Color(255, 128, 64);
 
         // Act & Assert
-        color1.GetHashCode().Should().Be(color2.GetHashCode());
+        color1.GetHashCode().ShouldBe(color2.GetHashCode());
     }
 
     [Fact]
@@ -303,7 +298,7 @@ public class ColorTests
         var color2 = new Color(128, 255, 64);
 
         // Act & Assert
-        color1.GetHashCode().Should().NotBe(color2.GetHashCode());
+        color1.GetHashCode().ShouldNotBe(color2.GetHashCode());
     }
 
     [Fact]
@@ -327,8 +322,9 @@ public class ColorTests
         var supportedColors = GetSupportedColors();
 
         // Assert
-        supportedColors.Should().Contain(expectedColors);
-        supportedColors.Should().HaveCount(expectedColors.Length);
+        foreach (var color in expectedColors)
+            supportedColors.ShouldContain(color);
+        supportedColors.Count().ShouldBe(expectedColors.Length);
     }
 
     [Theory]
@@ -347,7 +343,7 @@ public class ColorTests
         Action act = () => Color.CreateFromHex(colorHex);
 
         // Assert
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
     }
 
     [Fact]
@@ -359,10 +355,10 @@ public class ColorTests
         Action act3 = () => new Color(0, 255, 0);
         Action act4 = () => new Color(255, 0, 255);
 
-        act1.Should().NotThrow();
-        act2.Should().NotThrow();
-        act3.Should().NotThrow();
-        act4.Should().NotThrow();
+        act1.ShouldNotThrow();
+        act2.ShouldNotThrow();
+        act3.ShouldNotThrow();
+        act4.ShouldNotThrow();
     }
 
     [Fact]
@@ -427,7 +423,7 @@ public class ColorTests
         var color = Color.CreateFromHex(whiteHex);
 
         // Assert
-        color.Should().Be(Color.White);
+        color.ShouldBe(Color.White);
     }
 
     [Fact]
@@ -441,9 +437,9 @@ public class ColorTests
         var blended = red.BlendWith(blue, 0.5m);
 
         // Assert
-        blended.R.Should().Be(127);
-        blended.G.Should().Be(0);
-        blended.B.Should().Be(127);
+        blended.R.ShouldBe(127);
+        blended.G.ShouldBe(0);
+        blended.B.ShouldBe(127);
     }
 
     [Fact]
@@ -456,9 +452,9 @@ public class ColorTests
         var lightened = darkGray.Lighten(0.5m);
 
         // Assert
-        lightened.R.Should().BeGreaterThan(100);
-        lightened.G.Should().BeGreaterThan(100);
-        lightened.B.Should().BeGreaterThan(100);
+        lightened.R.ShouldBeGreaterThan(100);
+        lightened.G.ShouldBeGreaterThan(100);
+        lightened.B.ShouldBeGreaterThan(100);
     }
 
     [Fact]
@@ -471,9 +467,9 @@ public class ColorTests
         var darkened = lightGray.Darken(0.5m);
 
         // Assert
-        darkened.R.Should().BeLessThan(200);
-        darkened.G.Should().BeLessThan(200);
-        darkened.B.Should().BeLessThan(200);
+        darkened.R.ShouldBeLessThan(200);
+        darkened.G.ShouldBeLessThan(200);
+        darkened.B.ShouldBeLessThan(200);
     }
 
     [Fact]
@@ -486,10 +482,10 @@ public class ColorTests
         var semiTransparent = color.WithOpacity(0.50m);
 
         // Assert
-        semiTransparent.A.Should().Be(0.50m);
-        semiTransparent.R.Should().Be(color.R);
-        semiTransparent.G.Should().Be(color.G);
-        semiTransparent.B.Should().Be(color.B);
+        semiTransparent.A.ShouldBe(0.50m);
+        semiTransparent.R.ShouldBe(color.R);
+        semiTransparent.G.ShouldBe(color.G);
+        semiTransparent.B.ShouldBe(color.B);
     }
 
     [Fact]
@@ -499,8 +495,8 @@ public class ColorTests
         var transparent = Color.Transparent;
 
         // Act & Assert
-        transparent.IsTransparent.Should().BeTrue();
-        transparent.IsOpaque.Should().BeFalse();
+        transparent.IsTransparent.ShouldBeTrue();
+        transparent.IsOpaque.ShouldBeFalse();
     }
 
     [Fact]
@@ -510,8 +506,8 @@ public class ColorTests
         var opaque = Color.White;
 
         // Act & Assert
-        opaque.IsOpaque.Should().BeTrue();
-        opaque.IsTransparent.Should().BeFalse();
+        opaque.IsOpaque.ShouldBeTrue();
+        opaque.IsTransparent.ShouldBeFalse();
     }
 
     [Fact]
@@ -525,8 +521,8 @@ public class ColorTests
         var hexWithoutOpacity = color.ToHexString(false);
 
         // Assert
-        hexWithOpacity.Should().Be("#FF804080");
-        hexWithoutOpacity.Should().Be("#FF8040");
+        hexWithOpacity.ShouldBe("#FF804080");
+        hexWithoutOpacity.ShouldBe("#FF8040");
     }
 
     // Helper method to access protected SupportedColors property

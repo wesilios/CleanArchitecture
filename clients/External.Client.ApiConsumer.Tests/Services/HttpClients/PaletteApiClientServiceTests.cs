@@ -1,7 +1,7 @@
 using External.Client.ApiConsumer.Services.HttpClients;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Shouldly;
 
 namespace External.Client.ApiConsumer.Tests.Services.HttpClients;
 
@@ -29,14 +29,14 @@ public class PaletteApiClientServiceTests
         var service = new PaletteApiClientService(_mockPaletteApiClient.Object, _mockLogger.Object);
 
         // Assert
-        service.Should().NotBeNull();
+        service.ShouldNotBeNull();
     }
 
     [Fact]
     public void Service_ImplementsIApiClientService()
     {
         // Assert
-        _service.Should().BeAssignableTo<IApiClientService>();
+        _service.ShouldBeAssignableTo<IApiClientService>();
     }
 
     // Note: Due to Refit's ApiResponse<T> being a sealed class, comprehensive unit testing

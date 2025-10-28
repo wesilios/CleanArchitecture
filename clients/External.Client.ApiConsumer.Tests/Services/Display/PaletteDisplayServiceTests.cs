@@ -1,6 +1,6 @@
 using External.Client.ApiConsumer.Models;
 using External.Client.ApiConsumer.Services.Display;
-using FluentAssertions;
+using Shouldly;
 
 namespace External.Client.ApiConsumer.Tests.Services.Display;
 
@@ -19,7 +19,7 @@ public class PaletteDisplayServiceTests
     public void Constructor_WithPaletteSettings_InitializesCorrectly()
     {
         // Act & Assert
-        _displayService.Should().NotBeNull();
+        _displayService.ShouldNotBeNull();
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class PaletteDisplayServiceTests
         var message = "Test message";
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayMessage(message)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayMessage(message));
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class PaletteDisplayServiceTests
         var message = "Test error";
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayError(message)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayError(message));
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class PaletteDisplayServiceTests
         var message = "Test success";
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplaySuccess(message)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplaySuccess(message));
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public class PaletteDisplayServiceTests
         };
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPaletteDetails(palette)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPaletteDetails(palette));
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class PaletteDisplayServiceTests
         };
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPalettes(palettes)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPalettes(palettes));
     }
 
     [Fact]
@@ -116,8 +116,7 @@ public class PaletteDisplayServiceTests
         var paletteName = "Test Palette";
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPaletteCapacity(currentCount, maxColors, paletteName))
-            .Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPaletteCapacity(currentCount, maxColors, paletteName));
     }
 
     [Theory]
@@ -130,8 +129,7 @@ public class PaletteDisplayServiceTests
         var paletteName = "Test Palette";
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPaletteCapacity(currentCount, maxColors, paletteName))
-            .Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPaletteCapacity(currentCount, maxColors, paletteName));
     }
 
     [Fact]
@@ -147,7 +145,7 @@ public class PaletteDisplayServiceTests
         };
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPalettes(emptyPalettes)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPalettes(emptyPalettes));
     }
 
     [Fact]
@@ -163,7 +161,7 @@ public class PaletteDisplayServiceTests
         };
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPaletteDetails(paletteWithNoColors)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPaletteDetails(paletteWithNoColors));
     }
 
     [Fact]
@@ -192,6 +190,6 @@ public class PaletteDisplayServiceTests
         };
 
         // Act & Assert
-        _displayService.Invoking(s => s.DisplayPaletteDetails(fullPalette)).Should().NotThrow();
+        Should.NotThrow(() => _displayService.DisplayPaletteDetails(fullPalette));
     }
 }

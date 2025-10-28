@@ -3,9 +3,9 @@ using External.Client.ApiConsumer.Services;
 using External.Client.ApiConsumer.Services.Display;
 using External.Client.ApiConsumer.Services.Handlers;
 using External.Client.ApiConsumer.Services.Input;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Shouldly;
 
 namespace External.Client.ApiConsumer.Tests.Services.Handlers;
 
@@ -51,7 +51,7 @@ public class PaletteCommandHandlerTests
         var result = await _handler.CanHandleAsync(command);
 
         // Assert
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [Fact]
@@ -225,11 +225,11 @@ public class PaletteCommandHandlerTests
         // Act & Assert
         if (shouldBeFull)
         {
-            remainingSlots.Should().BeLessOrEqualTo(0);
+            remainingSlots.ShouldBeLessThanOrEqualTo(0);
         }
         else
         {
-            remainingSlots.Should().BeGreaterThan(0);
+            remainingSlots.ShouldBeGreaterThan(0);
         }
     }
 }
